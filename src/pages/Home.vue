@@ -46,7 +46,7 @@ const changePage = (page) => {
         @change-page="changePage"
       />
     </div>
-    <div class="w-1/5 p-4 bg-[#f5f5f5]">
+    <div class="w-1/5 p-4 bg-[#f7f5f0]">
       <ProfileCard />
     </div>
   </div>

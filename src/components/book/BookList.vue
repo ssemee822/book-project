@@ -3,6 +3,7 @@
     <div class="space-y-4 mb-6">
       <div
         v-for="(book, index) in books"
+        @click="goToDetail(book)"
         :key="book.isbn"
         class="bg-white p-4 rounded-xl shadow flex gap-4"
       >
@@ -30,7 +31,6 @@
             출판 {{ book.publisher }} • {{ book.datetime?.slice(0, 10) || "-" }}
           </div>
           <div class="text-sm text-gray-600 mt-1">
-            ISBN: {{ book.isbn }}<br />
             정가: {{ book.price.toLocaleString() }}원
             <template v-if="book.sale_price > 0">
               / 구매가: {{ book.sale_price.toLocaleString() }}원
@@ -75,6 +75,7 @@
 
 <script setup>
 import { computed } from "vue";
+import { useRouter } from "vue-router";
 
 const props = defineProps({
   books: Array,
@@ -95,4 +96,13 @@ const pageGroup = computed(() => {
     (_, i) => currentGroupStart.value + i
   ).filter((page) => page <= props.totalPages);
 });
+
+const router = useRouter();
+
+const goToDetail = (book) => {
+  router.push({
+    name: "BookDetail",
+    params: { isbn: book.isbn.split(" ")[0] },
+  });
+};
 </script>
