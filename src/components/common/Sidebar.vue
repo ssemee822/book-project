@@ -4,9 +4,7 @@
       <img src="/logo.png" class="w-40 inline-block mr-2" />
     </div>
     <ul class="space-y-2 text-lg">
-      <li
-        class="text-[#e3c02b] hover:font-semibold cursor-pointer p-2 text-center"
-      >
+      <li class="text-[#e3c02b] font-semibold cursor-pointer p-2 text-center">
         Home
       </li>
       <li
