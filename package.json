@@ -10,6 +10,10 @@
     "tailwind:init": "tailwindcss init -p"
   },
   "dependencies": {
+    "@fullcalendar/core": "^5.11.3",
+    "@fullcalendar/daygrid": "^5.11.3",
+    "@fullcalendar/interaction": "^5.11.3",
+    "@fullcalendar/vue3": "^5.11.3",
     "axios": "^1.9.0",
     "pinia": "^3.0.3",
     "vue": "^3.5.13",
