@@ -5,6 +5,10 @@ const router = useRouter();
 const goHome = () => {
   router.push("/");
 };
+
+const goMyPage = () => {
+  router.push("/mypage");
+};
 </script>
 
 <template>
@@ -29,6 +33,7 @@ const goHome = () => {
       </li>
       <li
         class="text-[#9baa59] hover:font-semibold cursor-pointer p-2 text-center"
+        @click="goMyPage"
       >
         내 서재
       </li>

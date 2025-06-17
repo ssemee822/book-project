@@ -24,12 +24,7 @@
               type="date"
               class="border rounded px-2 py-1"
             />
-            <button
-              @click="addTodo"
-              class="bg-[#e3c02b] hover:bg-[#caa900] text-white font-semibold px-4 py-1 rounded"
-            >
-              추가
-            </button>
+            <BaseButton @click="addTodo">추가</BaseButton>
           </div>
           <ul class="space-y-2">
             <li
@@ -75,6 +70,7 @@
 </template>
 
 <script setup>
+import BaseButton from "../components/common/BaseButton.vue";
 import "@fullcalendar/core/vdom";
 import FullCalendar from "@fullcalendar/vue3";
 import dayGridPlugin from "@fullcalendar/daygrid";

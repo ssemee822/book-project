@@ -5,7 +5,7 @@ import { RouterView } from "vue-router";
 
 <template>
   <div class="flex min-h-screen">
-    <Sidebar class="w-1/6 bg-[#f7f5f0] p-4" />
+    <Sidebar class="w-1/5 bg-[#f7f5f0] p-4" />
     <div class="flex-1 flex flex-col bg-[#fafafa]">
       <RouterView class="flex-1 p-4 overflow-auto" />
     </div>
