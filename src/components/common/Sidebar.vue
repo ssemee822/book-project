@@ -10,12 +10,18 @@ const goMyPage = () => {
   router.push("/mypage");
 };
 
+<<<<<<< HEAD
 const goLogin = () => {
   router.push("/login");
 };
 
 const goSignup = () => {
   router.push("/signup");
+};
+=======
+const goCommunity = () => {
+  router.push("/community");
+>>>>>>> origin
 };
 </script>
 
@@ -39,6 +45,7 @@ const goSignup = () => {
       </li>
       <li
         class="text-[#9baa59] hover:font-semibold cursor-pointer p-2 text-center"
+        @click="goCommunity"
       >
         Community
       </li>

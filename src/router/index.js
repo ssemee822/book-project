@@ -3,7 +3,6 @@ import Home from "../pages/Home.vue";
 import BookDetail from "../pages/BookDetail.vue";
 import LoginPage from '../pages/LoginPage.vue'
 import MyPage from "../pages/MyPage.vue";
-import SignupPage from "../pages/SignupPage.vue";
 
 const routes = [
   { path: "/", component: Home },
@@ -15,7 +14,8 @@ const routes = [
     path: "/book/:isbn",
     name: "BookDetail",
     component: BookDetail,
-  }
+  },
+  { path: "/mypage", component: MyPage },
 ];
 
 const router = createRouter({
