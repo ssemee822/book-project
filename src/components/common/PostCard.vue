@@ -1,5 +1,5 @@
 <template>
-  <div class="flex bg-white rounded-xl shadow p-4 gap-4">
+  <div class="flex bg-white rounded-xl shadow p-4 gap-4" @click="goCommunity">
     <img
       :src="post.image"
       alt="thumbnail"
@@ -28,13 +28,15 @@
 </template>
 
 <script setup>
+import { useRouter } from "vue-router";
+
 const props = defineProps({
   post: Object,
 });
-</script>
 
-<style scoped>
-h2 {
-  font-weight: 500;
-}
-</style>
+const router = useRouter();
+
+const goCommunity = () => {
+  router.push("/post");
+};
+</script>

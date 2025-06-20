@@ -21,7 +21,7 @@ const dummyData = [
     author: "김세민",
     date: "2025-06-18",
     views: 12,
-    image: "/public/default_profile.png",
+    image: "/public/ex_book.jpg",
   },
   {
     id: 2,
@@ -31,7 +31,7 @@ const dummyData = [
       "컨텐츠 내용입니다. 어쩌구 저쩌구 . 안녕안녕 안녕 안녕안녕 반가반가반가반가반가 안뇽ㄴ 테스트 테스트 테스트 테스트테스트테스트테스트테스트",
     date: "2025-06-17",
     views: 30,
-    image: "/public/default_profile.png",
+    image: "/public/ex_book.jpg",
   },
   {
     id: 3,
@@ -41,7 +41,7 @@ const dummyData = [
     author: "이영희",
     date: "2025-06-16",
     views: 22,
-    image: "/public/default_profile.png",
+    image: "/public/ex_book.jpg",
   },
   {
     id: 4,
@@ -51,7 +51,7 @@ const dummyData = [
     author: "박하늘",
     date: "2025-06-15",
     views: 17,
-    image: "/public/default_profile.png",
+    image: "/public/ex_book.jpg",
   },
   {
     id: 5,
@@ -59,7 +59,7 @@ const dummyData = [
     author: "최민수",
     date: "2025-06-14",
     views: 40,
-    image: "/public/default_profile.png",
+    image: "/public/ex_book.jpg",
     contents: "tes",
   },
 ];
@@ -67,10 +67,6 @@ const dummyData = [
 onMounted(() => {
   handleSearch();
 });
-
-const goCommunity = () => {
-  router.push("/post");
-};
 
 const handleSearch = () => {
   posts.value = dummyData;
