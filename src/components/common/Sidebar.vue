@@ -16,6 +16,15 @@ const goMyPage = () => {
 const goCommunity = () => {
   router.push("/community");
 };
+
+const goLogin = () => {
+  router.push("/login");
+};
+
+const goSignup = () => {
+  router.push("/signup");
+};
+
 </script>
 
 <template>
@@ -59,6 +68,18 @@ const goCommunity = () => {
         @click="goMyPage"
       >
         내 서재
+      </li>
+         <li
+        class="text-[#9baa59] hover:font-semibold cursor-pointer p-2 text-center"
+        @click="goLogin"
+      >
+        로그인
+      </li>
+      <li
+        class="text-[#9baa59] hover:font-semibold cursor-pointer p-2 text-center"
+        @click="goSignup"
+      >
+        회원가입
       </li>
     </ul>
   </div>

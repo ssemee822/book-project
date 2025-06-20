@@ -4,6 +4,8 @@ import BookDetail from "../pages/BookDetail.vue";
 import MyPage from "../pages/MyPage.vue";
 import Community from "../pages/Community.vue";
 import PostDetail from "../pages/PostDetail.vue";
+import LoginPage from "../pages/LoginPage.vue";   // 추가
+import SignupPage from "../pages/SignupPage.vue";
 
 const routes = [
   { path: "/", name: "Home", component: Home },
@@ -15,6 +17,8 @@ const routes = [
   { path: "/mypage", name: "MyPage", component: MyPage },
   { path: "/community", name: "Community", component: Community },
   { path: "/post", name: "PostDetail", component: PostDetail },
+  { path: "/login", name: "LoginPage", component: LoginPage },
+  { path: "/signup", name: "SignupPage", component: SignupPage },  
 ];
 
 const router = createRouter({
