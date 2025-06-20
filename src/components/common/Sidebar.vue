@@ -9,6 +9,10 @@ const goHome = () => {
 const goMyPage = () => {
   router.push("/mypage");
 };
+
+const goCommunity = () => {
+  router.push("/community");
+};
 </script>
 
 <template>
@@ -28,6 +32,7 @@ const goMyPage = () => {
       </li>
       <li
         class="text-[#9baa59] hover:font-semibold cursor-pointer p-2 text-center"
+        @click="goCommunity"
       >
         Community
       </li>
