@@ -86,7 +86,8 @@ const post = {
   author: "김세민",
   date: "2025-06-18",
   views: 12,
-  image: "/public/ex_book.jpg",
+  image:
+    "https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6893954%3Ftimestamp%3D20250522155332",
 };
 
 const comments = ref([
