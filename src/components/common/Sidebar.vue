@@ -10,7 +10,6 @@ const goMyPage = () => {
   router.push("/mypage");
 };
 
-<<<<<<< HEAD
 const goLogin = () => {
   router.push("/login");
 };
@@ -18,11 +17,11 @@ const goLogin = () => {
 const goSignup = () => {
   router.push("/signup");
 };
-=======
+
 const goCommunity = () => {
   router.push("/community");
->>>>>>> origin
 };
+
 </script>
 
 <template>
