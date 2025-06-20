@@ -2,7 +2,6 @@
   <div class="flex min-h-screen bg-[#fefdfb]">
     <div class="flex-1 p-10">
       <div class="flex gap-8" v-if="book != null">
-        <!-- 도서 이미지 고정 배경 박스 -->
         <div
           class="w-64 h-96 bg-white rounded-xl shadow flex items-center justify-center"
         >
@@ -13,7 +12,6 @@
           />
         </div>
 
-        <!-- 도서 정보 영역 -->
         <div class="flex-1 space-y-4">
           <h1 class="text-3xl font-bold text-gray-900">{{ book.title }}</h1>
           <div class="text-gray-700 grid grid-cols-2 gap-4 text-sm">
@@ -69,7 +67,6 @@
         </div>
       </div>
 
-      <!-- 별점 및 댓글/블로그 -->
       <div class="grid grid-cols-2 gap-6 mt-10">
         <div
           class="bg-white p-6 rounded shadow-md flex flex-col items-center text-center"
@@ -89,14 +86,36 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-2 gap-6 mt-6">
+      <div class="gap-6 mt-6">
         <div class="bg-white p-6 rounded shadow-md">
-          <h2 class="text-lg font-semibold mb-2">💬 댓글</h2>
-          <p class="text-gray-500 text-sm">(예시) 좋은 책이었어요!</p>
-        </div>
-        <div class="bg-white p-6 rounded shadow-md">
-          <h2 class="text-lg font-semibold mb-2">📝 블로그</h2>
-          <p class="text-gray-500 text-sm">연결된 블로그 리뷰</p>
+          <div class="grid grid-cols-2 border-b pb-4 mb-6">
+            <h2
+              class="text-lg font-semibold cursor-pointer text-center"
+              :class="{
+                'text-[#9baa59] border-b-2 border-[#9baa59] pb-1':
+                  selectedTab === 'comment',
+              }"
+              @click="selectTab('comment')"
+            >
+              💬 댓글
+            </h2>
+            <h2
+              class="text-lg font-semibold cursor-pointer text-center"
+              :class="{
+                'text-[#9baa59] border-b-2 border-[#9baa59] pb-1':
+                  selectedTab === 'blog',
+              }"
+              @click="selectTab('blog')"
+            >
+              📝 블로그
+            </h2>
+          </div>
+          <div>
+            <Comment v-if="selectedTab === 'comment'" />
+            <div v-if="selectedTab === 'blog'" class="space-y-4">
+              <PostCard v-for="post in dummyData" :key="post.id" :post="post" />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -109,9 +128,17 @@
 
 <script setup>
 import ProfileCard from "../components/common/ProfileCard.vue";
+import Comment from "../components/common/Comment.vue";
+import PostCard from "../components/common/PostCard.vue";
 import { useRoute } from "vue-router";
 import { onMounted, ref } from "vue";
 import { searchBooks } from "../api/kakao.js";
+
+const selectedTab = ref("comment");
+
+const selectTab = (tab) => {
+  selectedTab.value = tab;
+};
 
 const route = useRoute();
 const isbn = route.params.isbn;
@@ -126,4 +153,60 @@ const getHighQualityThumbnail = (url) => {
   const match = url?.match(/fname=(.+)$/);
   return match ? decodeURIComponent(match[1]) : url;
 };
+const dummyData = [
+  {
+    id: 1,
+    title: "처음 올리는 게시글입니다",
+    contents:
+      "컨텐츠 내용입니다. 어쩌구 저쩌구 . 안녕안녕 안녕 안녕안녕 반가반가반가반가반가 안뇽ㄴ 테스트 테스트 테스트 테스트테스트테스트테스트테스트컨텐츠 내용입니다. 어쩌구 저쩌구 . 안녕안녕 안녕 안녕안녕 반가반가반가반가반가 안뇽ㄴ 테스트 테스트 테스트 테스트테스트테스트테스트테스트",
+    author: "김세민",
+    date: "2025-06-18",
+    views: 12,
+    image:
+      "https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6893954%3Ftimestamp%3D20250522155332",
+  },
+  {
+    id: 2,
+    title: "책 추천해주세요!",
+    author: "홍길동",
+    contents:
+      "컨텐츠 내용입니다. 어쩌구 저쩌구 . 안녕안녕 안녕 안녕안녕 반가반가반가반가반가 안뇽ㄴ 테스트 테스트 테스트 테스트테스트테스트테스트테스트",
+    date: "2025-06-17",
+    views: 30,
+    image:
+      "https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6893954%3Ftimestamp%3D20250522155332",
+  },
+  {
+    id: 3,
+    title: "이 책 내용 질문있어요",
+    contents:
+      "컨텐츠 내용입니다. 어쩌구 저쩌구 . 안녕안녕 안녕 안녕안녕 반가반가반가반가반가 안뇽ㄴ 테스트 테스트 테스트 테스트테스트테스트테스트테스트컨텐츠 내용입니다. 어쩌구 저쩌구 . 안녕안녕 안녕 안녕안녕 반가반가반가반가반가 안뇽ㄴ 테스트 테스트 테스트 테스트테스트테스트테스트테스트",
+    author: "이영희",
+    date: "2025-06-16",
+    views: 22,
+    image:
+      "https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6893954%3Ftimestamp%3D20250522155332",
+  },
+  {
+    id: 4,
+    contents:
+      "컨텐츠 내용입니다. 어쩌구 저쩌구 . 안녕안녕 안녕 안녕안녕 반가반가반가반가반가 안뇽ㄴ 테스트 테스트 테스트 테스트테스트테스트테스트테스트",
+    title: "좋은 문장 나눠요 😊",
+    author: "박하늘",
+    date: "2025-06-15",
+    views: 17,
+    image:
+      "https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6893954%3Ftimestamp%3D20250522155332",
+  },
+  {
+    id: 5,
+    title: "독서모임 모집합니다",
+    author: "최민수",
+    date: "2025-06-14",
+    views: 40,
+    image:
+      "https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6893954%3Ftimestamp%3D20250522155332",
+    contents: "tes",
+  },
+];
 </script>

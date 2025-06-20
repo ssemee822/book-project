@@ -25,34 +25,10 @@
         <div class="text-base leading-relaxed whitespace-pre-line p-6 w-5/6">
           {{ post.contents }}
         </div>
+
         <div class="w-full mt-12 px-6">
           <h2 class="text-lg font-semibold mb-4">💬 댓글</h2>
-
-          <div class="mb-6 flex gap-2">
-            <input
-              v-model="newComment"
-              type="text"
-              placeholder="댓글을 입력하세요"
-              class="flex-1 border border-gray-300 rounded px-3 py-2 text-sm"
-            />
-            <BaseButton>등록</BaseButton>
-          </div>
-
-          <ul class="space-y-4 p-4">
-            <li
-              v-for="comment in comments"
-              :key="comment.id"
-              class="border-b pb-3"
-            >
-              <div class="text-sm font-medium text-gray-800">
-                {{ comment.author }}
-              </div>
-              <div class="text-sm text-gray-600 mb-1">
-                {{ comment.content }}
-              </div>
-              <div class="text-xs text-gray-400">{{ comment.date }}</div>
-            </li>
-          </ul>
+          <Comment></Comment>
         </div>
       </div>
     </div>
@@ -65,7 +41,7 @@
 <script setup>
 import ProfileCard from "../components/common/ProfileCard.vue";
 import BaseButton from "../components/common/BaseButton.vue";
-import { ref } from "vue";
+import Comment from "../components/common/Comment.vue";
 
 const post = {
   id: 1,
@@ -89,25 +65,4 @@ const post = {
   image:
     "https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6893954%3Ftimestamp%3D20250522155332",
 };
-
-const comments = ref([
-  {
-    id: 1,
-    author: "독서왕",
-    content: "이 책 정말 감동적이었어요!",
-    date: "2025-06-18",
-  },
-  {
-    id: 2,
-    author: "문장수집가",
-    content: "좋은 문장 감사합니다 😊",
-    date: "2025-06-18",
-  },
-  {
-    id: 3,
-    author: "책벌레",
-    content: "궁금했던 내용이 잘 정리되어 있네요!",
-    date: "2025-06-17",
-  },
-]);
 </script>
