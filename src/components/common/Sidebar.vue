@@ -1,6 +1,9 @@
 <script setup>
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
+const route = useRoute();
+
+console.log(route);
 
 const goHome = () => {
   router.push("/");
@@ -34,19 +37,34 @@ const goSignup = () => {
     </div>
     <ul class="space-y-2 text-lg">
       <li
-        class="text-[#e3c02b] font-semibold cursor-pointer p-2 text-center"
+        class="cursor-pointer p-2 text-center"
+        :class="
+          route.name == 'Home' || route.name == 'BookDetail'
+            ? 'text-[#e3c02b] font-semibold'
+            : 'text-[#9baa59] hover:font-semibold'
+        "
         @click="goHome"
       >
         Home
       </li>
       <li
-        class="text-[#9baa59] hover:font-semibold cursor-pointer p-2 text-center"
+        class="cursor-pointer p-2 text-center"
+        :class="
+          route.name == 'Community' || route.name == 'PostDetail'
+            ? 'text-[#e3c02b] font-semibold'
+            : 'text-[#9baa59] hover:font-semibold'
+        "
         @click="goCommunity"
       >
         Community
       </li>
       <li
-        class="text-[#9baa59] hover:font-semibold cursor-pointer p-2 text-center"
+        class="cursor-pointer p-2 text-center"
+        :class="
+          route.name == 'MyPage'
+            ? 'text-[#e3c02b] font-semibold'
+            : 'text-[#9baa59] hover:font-semibold'
+        "
         @click="goMyPage"
       >
         내 서재

@@ -23,7 +23,7 @@
           </div>
         </div>
         <div class="flex-1">
-          <div class="font-semibold text-blue-700 leading-snug">
+          <div class="font-semibold leading-snug">
             {{ book.title }}
           </div>
           <div class="text-sm text-gray-700 mt-1">

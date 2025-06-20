@@ -17,7 +17,7 @@ import SignupPage from "../pages/SignupPage.vue"; // 추가
 
 
 const routes = [
-  { path: "/", component: Home },
+  { path: "/", name: "Home", component: Home },
   {
     path: "/book/:isbn",
     name: "BookDetail",
@@ -26,6 +26,7 @@ const routes = [
   },
   { path: "/mypage", component: MyPage },
   { path: "/community", component: Community },
+  { path: "/post", name: "PostDetail", component: PostDetail },
   {
     path: "/post/:id", // PostDetail은 특정 게시글을 보여주므로, ID 파라미터가 필요할 수 있습니다.
     name: "PostDetail",
