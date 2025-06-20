@@ -3,6 +3,7 @@ import Home from "../pages/Home.vue";
 import BookDetail from "../pages/BookDetail.vue";
 import MyPage from "../pages/MyPage.vue";
 import Community from "../pages/Community.vue";
+import PostDetail from "../pages/PostDetail.vue";
 
 const routes = [
   { path: "/", component: Home },
@@ -13,6 +14,7 @@ const routes = [
   },
   { path: "/mypage", component: MyPage },
   { path: "/community", component: Community },
+  { path: "/post", component: PostDetail },
 ];
 
 const router = createRouter({

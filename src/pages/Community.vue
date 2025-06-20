@@ -60,12 +60,17 @@ const dummyData = [
     date: "2025-06-14",
     views: 40,
     image: "/public/default_profile.png",
+    contents: "tes",
   },
 ];
 
 onMounted(() => {
   handleSearch();
 });
+
+const goCommunity = () => {
+  router.push("/post");
+};
 
 const handleSearch = () => {
   posts.value = dummyData;
@@ -89,7 +94,7 @@ const changePage = (page) => {
       </div>
 
       <div class="mb-4 text-lg font-semibold">
-        총 <span class="text-blue-600">{{ totalCount }}</span
+        총 <span class="text-[#9baa59]">{{ totalCount }}</span
         >개의 게시글이 있습니다
       </div>
 

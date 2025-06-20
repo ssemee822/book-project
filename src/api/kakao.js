@@ -14,5 +14,5 @@ export async function searchBooks(query, page = 1, target = "title") {
       page,
     },
   });
-  return response.data; // 책 배열
+  return response.data;
 }
