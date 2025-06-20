@@ -6,15 +6,15 @@ import Community from "../pages/Community.vue";
 import PostDetail from "../pages/PostDetail.vue";
 
 const routes = [
-  { path: "/", component: Home },
+  { path: "/", name: "Home", component: Home },
   {
     path: "/book/:isbn",
     name: "BookDetail",
     component: BookDetail,
   },
-  { path: "/mypage", component: MyPage },
-  { path: "/community", component: Community },
-  { path: "/post", component: PostDetail },
+  { path: "/mypage", name: "MyPage", component: MyPage },
+  { path: "/community", name: "Community", component: Community },
+  { path: "/post", name: "PostDetail", component: PostDetail },
 ];
 
 const router = createRouter({
