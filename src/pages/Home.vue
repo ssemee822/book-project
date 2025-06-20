@@ -5,6 +5,7 @@ import ProfileCard from "../components/common/ProfileCard.vue";
 import BaseButton from "../components/common/BaseButton.vue";
 import { ref, onMounted } from "vue";
 import { searchBooks } from "../api/kakao.js";
+import { useRoute, useRouter } from 'vue-router';
 
 const query = ref("안녕");
 const books = ref([]);
@@ -13,9 +14,13 @@ const totalPages = ref(1);
 const pageSize = 10;
 const totalCount = ref(0);
 const keyword = ref("");
+const route = useRoute();
+const router = useRouter();
 
 onMounted(() => {
-  search(1);
+  const page = parseInt(route.query.page) || 1;
+  currentPage.value = page;
+  search(page);
 });
 
 const search = async (page = 1) => {
@@ -34,6 +39,7 @@ const handleSearch = (value) => {
 
 const changePage = (page) => {
   if (page >= 1 && page <= totalPages.value) {
+    router.replace({ query: { ...route.query, page } }); // 🔄 URL 갱신
     search(page);
   }
 };
