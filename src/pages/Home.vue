@@ -6,6 +6,7 @@ import BaseButton from "../components/common/BaseButton.vue";
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from 'vue-router';
 import { searchBooks } from "../api/kakao.js";
+import { useRoute, useRouter } from 'vue-router';
 
 const query = ref("안녕");
 const books = ref([]);

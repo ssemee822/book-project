@@ -69,7 +69,7 @@ const goSignup = () => {
       >
         내 서재
       </li>
-         <li
+      <li
         class="text-[#9baa59] hover:font-semibold cursor-pointer p-2 text-center"
         @click="goLogin"
       >
