@@ -7,6 +7,7 @@ import PostDetail from "../pages/PostDetail.vue";
 import LoginPage from "../pages/LoginPage.vue";
 import SignupPage from "../pages/SignupPage.vue";
 import PostCreate from "../pages/PostCreate.vue";
+import Bestseller from "../pages/Bestseller.vue";
 
 const routes = [
   { path: "/", name: "Home", component: Home },
@@ -21,6 +22,8 @@ const routes = [
   { path: "/login", name: "LoginPage", component: LoginPage },
   { path: "/signup", name: "SignupPage", component: SignupPage },
   { path: "/postcreate", name: "PostCreate", component: PostCreate },
+  { path: "/postcreate", name: "PostCreate", component: PostCreate },
+  { path: "/bestseller", name: "Bestseller", component: Bestseller },
 ];
 
 const router = createRouter({

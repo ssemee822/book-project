@@ -4,7 +4,7 @@ const ALADIN_REST_API_KEY = "ttbjisuu78131719001";
 
 export async function getBestseller() {
   const response = await axios.get(
-    "https://cors-anywhere.herokuapp.com/http://www.aladin.co.kr/ttb/api/ItemList.aspx",
+    "http://www.aladin.co.kr/ttb/api/ItemList.aspx",
     {
       params: {
         ttbkey: ALADIN_REST_API_KEY,
