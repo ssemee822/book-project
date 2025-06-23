@@ -129,7 +129,7 @@
 <script setup>
 import ProfileCard from "../components/common/ProfileCard.vue";
 import Comment from "../components/common/Comment.vue";
-import PostCard from "../components/common/PostCard.vue";
+import PostCard from "../components/community/PostCard.vue";
 import { useRoute } from "vue-router";
 import { onMounted, ref } from "vue";
 import { searchBooks } from "../api/kakao.js";

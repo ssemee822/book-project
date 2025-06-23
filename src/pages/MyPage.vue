@@ -48,14 +48,14 @@
 
       <div class="bg-white rounded-xl shadow p-4">
         <h2 class="text-lg font-bold mb-4">📚 내 서재</h2>
-        <div class="grid grid-cols-4 gap-4">
+        <div class="grid grid-cols-3 gap-4">
           <div
             v-for="i in 6"
             :key="i"
             class="flex flex-col items-center text-center"
           >
             <img
-              src="/public/default_profile.png"
+              src="https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6893954%3Ftimestamp%3D20250522155332"
               alt="book"
               class="w-20 h-28 object-cover rounded shadow"
             />

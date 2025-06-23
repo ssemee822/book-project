@@ -1,5 +1,6 @@
-\<script setup>
-import { ref, computed } from 'vue';
+\
+<script setup>
+import { ref, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
 const router = useRouter();
@@ -11,37 +12,36 @@ const selectedClickedItem = ref(null);
 
 const goHome = () => {
   router.push("/");
-  selectedClickedItem.value = 'home';
+  selectedClickedItem.value = "home";
 };
 
 const goMyPage = () => {
   router.push("/mypage");
-  selectedClickedItem.value = 'myPage';
+  selectedClickedItem.value = "myPage";
 };
 
 const goCommunity = () => {
   router.push("/community");
-  selectedClickedItem.value = 'community';
+  selectedClickedItem.value = "community";
 };
 
 const goLogin = () => {
   router.push("/login");
-  selectedClickedItem.value = 'loginSignupBanner';
+  selectedClickedItem.value = "loginSignupBanner";
 };
 
 const goSignup = () => {
   router.push("/signup");
-  selectedClickedItem.value = 'loginSignupBanner';
+  selectedClickedItem.value = "loginSignupBanner";
 };
 
 const isLoginSignupBannerActive = computed(() => {
-  return route.name === 'Login' || route.name === 'Signup';
+  return route.name === "Login" || route.name === "Signup";
 });
-
 
 const clickLoginSignupBanner = () => {
   router.push("/login");
-  selectedClickedItem.value = 'loginSignupBanner';
+  selectedClickedItem.value = "loginSignupBanner";
 };
 </script>
 
@@ -58,8 +58,10 @@ const clickLoginSignupBanner = () => {
         class="cursor-pointer p-4 rounded-lg mb-4"
         :class="{
           'bg-[#e3c02b] text-white': isLoginSignupBannerActive,
-          'bg-[#9baa59] text-gray-200 hover:bg-[#9baa59]': !isLoginSignupBannerActive,
-          'border-2 border-yellow-400': selectedClickedItem === 'loginSignupBanner' 
+          'bg-[#9baa59] text-gray-200 hover:bg-[#9baa59]':
+            !isLoginSignupBannerActive,
+          'border-2 border-yellow-400':
+            selectedClickedItem === 'loginSignupBanner',
         }"
         @click="clickLoginSignupBanner"
       >
@@ -70,9 +72,12 @@ const clickLoginSignupBanner = () => {
       <li
         class="cursor-pointer p-2 text-center"
         :class="{
-          'text-[#e3c02b] font-semibold': route.name === 'Home' || route.name === 'BookDetail',
-          'text-[#9baa59] hover:font-semibold': !(route.name === 'Home' || route.name === 'BookDetail'),
-          'bg-gray-200': selectedClickedItem === 'home'
+          'text-[#e3c02b] font-semibold':
+            route.name === 'Home' || route.name === 'BookDetail',
+          'text-[#9baa59] hover:font-semibold': !(
+            route.name === 'Home' || route.name === 'BookDetail'
+          ),
+          'bg-gray-200': selectedClickedItem === 'home',
         }"
         @click="goHome"
       >
@@ -81,9 +86,16 @@ const clickLoginSignupBanner = () => {
       <li
         class="cursor-pointer p-2 text-center"
         :class="{
-          'text-[#e3c02b] font-semibold': route.name === 'Community' || route.name === 'PostDetail',
-          'text-[#9baa59] hover:font-semibold': !(route.name === 'Community' || route.name === 'PostDetail'),
-          'bg-gray-200': selectedClickedItem === 'community'
+          'text-[#e3c02b] font-semibold':
+            route.name === 'Community' ||
+            route.name === 'PostDetail' ||
+            route.name === 'PostCreate',
+          'text-[#9baa59] hover:font-semibold': !(
+            route.name === 'Community' ||
+            route.name === 'PostDetail' ||
+            route.name === 'PostCreate'
+          ),
+          'bg-gray-200': selectedClickedItem === 'community',
         }"
         @click="goCommunity"
       >
@@ -94,12 +106,12 @@ const clickLoginSignupBanner = () => {
         :class="{
           'text-[#e3c02b] font-semibold': route.name === 'MyPage',
           'text-[#9baa59] hover:font-semibold': !(route.name === 'MyPage'),
-          'bg-gray-200': selectedClickedItem === 'myPage'
+          'bg-gray-200': selectedClickedItem === 'myPage',
         }"
         @click="goMyPage"
       >
         내 서재
       </li>
-      </ul>
+    </ul>
   </div>
 </template>

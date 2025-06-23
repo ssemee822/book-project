@@ -2,8 +2,9 @@
 import SearchBar from "../components/common/SearchBar.vue";
 import BaseButton from "../components/common/BaseButton.vue";
 import ProfileCard from "../components/common/ProfileCard.vue";
-import PostCard from "../components/common/PostCard.vue";
+import PostCard from "../components/community/PostCard.vue";
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
 const query = ref("");
 const posts = ref([]);
@@ -11,6 +12,7 @@ const currentPage = ref(1);
 const totalPages = ref(1);
 const totalCount = ref(0);
 const pageSize = 5;
+const router = useRouter();
 
 const dummyData = [
   {
@@ -84,6 +86,10 @@ const changePage = (page) => {
     currentPage.value = page;
   }
 };
+
+const goPostCreate = () => {
+  router.push("/postcreate");
+};
 </script>
 
 <template>
@@ -94,9 +100,12 @@ const changePage = (page) => {
         <BaseButton @click="handleSearch">검색</BaseButton>
       </div>
 
-      <div class="mb-4 text-lg font-semibold">
-        총 <span class="text-[#9baa59]">{{ totalCount }}</span
-        >개의 게시글이 있습니다
+      <div class="mb-4 text-lg font-semibold flex justify-between">
+        <div class="pl-4">
+          총 <span class="text-[#9baa59]">{{ totalCount }}</span
+          >개의 게시글이 있습니다
+        </div>
+        <BaseButton @click="goPostCreate">글쓰기</BaseButton>
       </div>
 
       <div class="space-y-3">

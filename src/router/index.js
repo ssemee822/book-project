@@ -4,8 +4,9 @@ import BookDetail from "../pages/BookDetail.vue";
 import MyPage from "../pages/MyPage.vue";
 import Community from "../pages/Community.vue";
 import PostDetail from "../pages/PostDetail.vue";
-import LoginPage from "../pages/LoginPage.vue";   // 추가
+import LoginPage from "../pages/LoginPage.vue";
 import SignupPage from "../pages/SignupPage.vue";
+import PostCreate from "../pages/PostCreate.vue";
 
 const routes = [
   { path: "/", name: "Home", component: Home },
@@ -18,7 +19,8 @@ const routes = [
   { path: "/community", name: "Community", component: Community },
   { path: "/post", name: "PostDetail", component: PostDetail },
   { path: "/login", name: "LoginPage", component: LoginPage },
-  { path: "/signup", name: "SignupPage", component: SignupPage },  
+  { path: "/signup", name: "SignupPage", component: SignupPage },
+  { path: "/postcreate", name: "PostCreate", component: PostCreate },
 ];
 
 const router = createRouter({

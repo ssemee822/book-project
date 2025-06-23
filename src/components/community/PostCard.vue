@@ -7,7 +7,9 @@
     />
     <div class="flex flex-col justify-between flex-1">
       <div>
-        <h2 class="text-base text-gray-800 mb-1 truncate">{{ post.title }}</h2>
+        <h2 class="font-semibold leading-snug text-gray-800 mb-1 truncate">
+          {{ post.title }}
+        </h2>
         <div class="text-sm text-gray-500 mb-1">
           <span class="mr-2">{{ post.author }}</span>
           <span>{{ post.date }}</span>
