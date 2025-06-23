@@ -1,18 +1,18 @@
 <script setup>
-import BookList from "../components/book/BookList.vue";
+import WeeklyPopularPosts from "../components/home/WeeklyPopularPosts.vue";
+import BestsellerList from "../components/book/BestsellerList.vue";
 import SearchBar from "../components/common/SearchBar.vue";
 import ProfileCard from "../components/common/ProfileCard.vue";
 import BaseButton from "../components/common/BaseButton.vue";
 import { ref, onMounted } from "vue";
-import { getBestseller } from "../api/aladin.js";
+import { useRoute, useRouter } from "vue-router";
+import { searchBooks } from "../api/kakao.js";
 
-const query = ref("안녕");
+const query = ref("베스트");
 const books = ref([]);
 const currentPage = ref(1);
-const totalPages = ref(1);
-const pageSize = 10;
-const totalCount = ref(0);
-const keyword = ref("");
+const route = useRoute();
+const router = useRouter();
 
 onMounted(() => {
   search(1);
@@ -20,44 +20,59 @@ onMounted(() => {
 
 const search = async (page = 1) => {
   currentPage.value = page;
-  const result = await getBestseller();
-  console.log(result);
+  router.replace({
+    query: {
+      ...route.query,
+      query: query.value,
+      page: page,
+    },
+  });
+
+  const result = await searchBooks(query.value, page);
   books.value = result.documents;
-  totalPages.value = Math.ceil(result.meta.pageable_count / pageSize);
-  totalCount.value = result.meta.total_count;
-  keyword.value = query.value;
 };
 
-const handleSearch = (value) => {
-  search(1);
-};
-
-const changePage = (page) => {
-  if (page >= 1 && page <= totalPages.value) {
-    search(page);
-  }
+const handleSearch = () => {
+  router.push({
+    name: "Search",
+    query: { page: 1, query: query.value },
+  });
 };
 </script>
 
 <template>
   <div class="flex">
     <div class="flex-1 p-4">
+      <div class="relative bg-black text-white rounded-xl overflow-hidden mb-6">
+        <img
+          src="https://images.unsplash.com/photo-1512820790803-83ca734da794"
+          class="w-full h-72 object-cover opacity-40"
+        />
+        <div
+          class="absolute inset-0 flex flex-col justify-center items-center text-center px-6"
+        >
+          <h1 class="text-3xl font-bold mb-2">
+            쭉정이에 오신 걸 환영합니다 📚
+          </h1>
+          <p class="text-lg mb-4">좋은 책을 발견하고, 리뷰를 나누세요.</p>
+          <router-link to="/community">
+            <button
+              class="bg-yellow-400 text-black font-bold px-6 py-2 rounded-xl hover:bg-yellow-300"
+            >
+              ✍ 리뷰 쓰기
+            </button>
+          </router-link>
+        </div>
+      </div>
+
       <div class="p-4 border-b mb-4 flex gap-2 items-center">
-        <SearchBar v-model="query" @search="search(1)" class="flex-1" />
-        <BaseButton @click="search(1)">검색</BaseButton>
+        <SearchBar v-model="query" @search="handleSearch" class="flex-1" />
+        <BaseButton @click="handleSearch">검색</BaseButton>
       </div>
-      <div class="mb-4 text-lg font-semibold">
-        <span class="text-[#9baa59] font-bold">'{{ keyword }}'</span>
-        에 대한
-        {{ totalCount.toLocaleString() }}개의 검색 결과
-      </div>
-      <BookList
-        :books="books"
-        :currentPage="currentPage"
-        :totalPages="totalPages"
-        :pageSize="pageSize"
-        @change-page="changePage"
-      />
+      <h2 class="text-xl font-bold mb-4">🔥 주간 인기글</h2>
+      <WeeklyPopularPosts class="mb-10" />
+      <h2 class="text-xl font-bold mb-4">📅 베스트셀러</h2>
+      <BestsellerList :books="books" />
     </div>
     <div class="w-1/4 p-4 bg-[#f7f5f0]">
       <ProfileCard />

@@ -8,9 +8,10 @@ import LoginPage from "../pages/LoginPage.vue";
 import SignupPage from "../pages/SignupPage.vue";
 import PostCreate from "../pages/PostCreate.vue";
 import Bestseller from "../pages/Bestseller.vue";
+import Search from "../pages/Search.vue";
 
 const routes = [
-  { path: "/", name: "Home", component: Home },
+  { path: "/", name: "Home", component: Bestseller },
   {
     path: "/book/:isbn",
     name: "BookDetail",
@@ -24,6 +25,7 @@ const routes = [
   { path: "/postcreate", name: "PostCreate", component: PostCreate },
   { path: "/postcreate", name: "PostCreate", component: PostCreate },
   { path: "/bestseller", name: "Bestseller", component: Bestseller },
+  { path: "/search", name: "Search", component: Search },
 ];
 
 const router = createRouter({
