@@ -51,66 +51,37 @@
         </div>
 
         <div>
-          <BaseButton type="submit" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            로그인
+          <BaseButton
+            type="submit"
+            :disabled="authStore.isLoading"
+            class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            {{ authStore.isLoading ? '로그인 중...' : '로그인' }}
           </BaseButton>
         </div>
+        <p v-if="authStore.error" class="text-red-500 text-sm text-center mt-2">{{ authStore.error }}</p>
       </form>
 
-      <div class="mt-6">
-        <div class="relative">
-          <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-gray-300"></div>
-          </div>
-          <div class="relative flex justify-center text-sm">
-            <span class="px-2 bg-white text-gray-500">또는</span>
-          </div>
-        </div>
-
-        <div class="mt-6">
-          <BaseButton @click="handleKakaoLogin" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-gray-700 bg-yellow-300 hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-            카카오 로그인
-          </BaseButton>
-        </div>
       </div>
-    </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router'; // Vue Router 임포트
-import BaseButton from '../components/common/BaseButton.vue'; // BaseButton 컴포넌트 임포트
-import * as kakaoApi from '../api/kakao.js'; // 카카오 API 모듈 임포트
+import { useRouter } from 'vue-router';
+import BaseButton from '../components/common/BaseButton.vue';
+import { useAuthStore } from '../stores/auth';
 
 const email = ref('');
 const password = ref('');
-const router = useRouter(); // useRouter 훅 사용
+const router = useRouter();
+const authStore = useAuthStore();
 
 const handleLogin = async () => {
-  // 여기에 실제 로그인 로직 (예: Firebase Auth 또는 백엔드 API 호출)
-  console.log('로그인 시도:', email.value, password.value);
-  alert('로그인 시도 (실제 로직은 백엔드 연동 필요)');
-
-  // 로그인 성공 시 홈 페이지로 리다이렉트
-  // router.push('/');
+  await authStore.login({ email: email.value, password: password.value });
 };
 
-const handleKakaoLogin = async () => {
-  try {
-    // kakao.js에 정의된 카카오 로그인 시작 함수 호출
-    await kakaoApi.loginWithKakao();
-    console.log('카카오 로그인 성공!');
-    alert('카카오 로그인 성공!');
-    // 카카오 로그인 성공 후 필요한 로직 (예: 사용자 정보 가져오기, 서버에 토큰 전송)
-    // router.push('/');
-  } catch (error) {
-    console.error('카카오 로그인 실패:', error);
-    alert('카카오 로그인 실패: ' + error.message);
-  }
-};
 </script>
 
 <style scoped>
-/* Tailwind CSS를 주로 사용하므로, 여기에 추가적인 커스텀 스타일만 작성 */
 </style>
