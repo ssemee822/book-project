@@ -15,17 +15,15 @@
       <form class="mt-8 space-y-6" @submit.prevent="handleSignup">
         <div class="rounded-md shadow-sm -space-y-px">
           <div>
-            <label for="username" class="sr-only">사용자 이름</label>
+            <label for="nickname" class="sr-only">닉네임</label>
             <input
-              id="username"
-              name="username"
+              id="nickname"
+              name="nickname"
               type="text"
-              autocomplete="username"
+              autocomplete="nickname"
               required
-              v-model="username"
-              class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="사용자 이름"
-            />
+              v-model="nickname" class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="닉네임" />
           </div>
           <div>
             <label for="email-address" class="sr-only">이메일 주소</label>
@@ -69,10 +67,15 @@
         </div>
 
         <div>
-          <BaseButton type="submit" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-            회원가입
+          <BaseButton
+            type="submit"
+            :disabled="authStore.isLoading"
+            class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+          >
+            {{ authStore.isLoading ? '가입 중...' : '회원가입' }}
           </BaseButton>
         </div>
+        <p v-if="authStore.error" class="text-red-500 text-sm text-center mt-2">{{ authStore.error }}</p>
       </form>
     </div>
   </div>
@@ -82,32 +85,29 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import BaseButton from '../components/common/BaseButton.vue';
+import { useAuthStore } from '../stores/auth';
 
-const username = ref('');
+const nickname = ref('');
 const email = ref('');
 const password = ref('');
 const passwordConfirm = ref('');
 const router = useRouter();
+const authStore = useAuthStore();
 
 const handleSignup = async () => {
   if (password.value !== passwordConfirm.value) {
-    alert('비밀번호가 일치하지 않습니다.');
+    authStore.error = '비밀번호가 일치하지 않습니다.';
     return;
   }
+  authStore.error = null;
 
-  // 여기에 실제 회원가입 로직 (예: Firebase Auth 또는 백엔드 API 호출)
-  console.log('회원가입 시도:', {
-    username: username.value,
+  await authStore.register({
+    nickname: nickname.value,
     email: email.value,
     password: password.value,
   });
-  alert('회원가입 시도 (실제 로직은 백엔드 연동 필요)');
-
-  // 회원가입 성공 시 로그인 페이지로 리다이렉트
-  // router.push('/login');
 };
 </script>
 
 <style scoped>
-/* Tailwind CSS를 주로 사용하므로, 여기에 추가적인 커스텀 스타일만 작성 */
 </style>
