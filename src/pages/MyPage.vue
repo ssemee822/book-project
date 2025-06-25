@@ -7,11 +7,21 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import koLocale from "@fullcalendar/core/locales/ko";
 import "@fullcalendar/common/main.css";
 import "@fullcalendar/daygrid/main.css";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import axios from "../api/axios";
+import ProfileCard from "../components/common/ProfileCard.vue";
 
 const todoList = ref([]);
 const newTodo = ref({ title: "", start: "", end: "", isbn: "" });
+
+onMounted(() => {
+  getTodoList();
+});
+
+const getTodoList = async () => {
+  const res = await axios.get(`/api/user/me/books`);
+  console.log(res);
+};
 
 const handleBookSelect = (book) => {
   console.log(book);
@@ -29,7 +39,6 @@ function addTodo() {
     end,
     done: false,
   };
-  todoList.value.push(newItem);
   calendarOptions.value.events.push({
     title: newItem.title,
     start: newItem.start,
@@ -46,13 +55,13 @@ function addTodo() {
 
 const uploadTodo = async () => {
   const accessToken = localStorage.getItem("accessToken");
-  const res = await axios.post(`/api/user/me/books`, {
+  const body = {
     memo: newTodo.value.title,
     startRead: newTodo.value.start,
     endRead: newTodo.value.end,
     isbn: newTodo.value.isbn,
-  });
-  console.log(res);
+  };
+  const res = await axios.post(`/api/user/me/books`, body);
 };
 
 function formatPeriod(start, end) {
@@ -105,7 +114,7 @@ function updateEventColor(todo) {
 
 <template>
   <div class="flex min-h-screen bg-gray-50">
-    <div class="flex-1 grid grid-cols-3 gap-6 p-6">
+    <div class="flex-1 gap-6 p-6">
       <div class="col-span-2 space-y-6">
         <div class="bg-white rounded-xl shadow p-4">
           <FullCalendar :options="calendarOptions" class="custom-calendar" />
@@ -151,26 +160,9 @@ function updateEventColor(todo) {
           </ul>
         </div>
       </div>
-
-      <div class="bg-white rounded-xl shadow p-4">
-        <h2 class="text-lg font-bold mb-4">📚 내 서재</h2>
-        <div class="grid grid-cols-3 gap-4">
-          <div
-            v-for="i in 6"
-            :key="i"
-            class="flex flex-col items-center text-center"
-          >
-            <img
-              src="https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6893954%3Ftimestamp%3D20250522155332"
-              alt="book"
-              class="w-20 h-28 object-cover rounded shadow"
-            />
-            <p class="text-sm text-gray-700 mt-2 truncate w-20">
-              책 제목 예시 {{ i }}
-            </p>
-          </div>
-        </div>
-      </div>
+    </div>
+    <div class="w-1/3 p-4 bg-[#f7f5f0]">
+      <ProfileCard />
     </div>
   </div>
 </template>

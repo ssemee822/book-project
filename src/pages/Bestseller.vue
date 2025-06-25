@@ -52,7 +52,7 @@ const handleSearch = () => {
       <h2 class="text-xl font-bold mb-4">📅 베스트셀러</h2>
       <BestsellerList />
     </div>
-    <div class="w-1/4 p-4 bg-[#f7f5f0]">
+    <div class="w-1/3 p-4 bg-[#f7f5f0]">
       <ProfileCard />
     </div>
   </div>

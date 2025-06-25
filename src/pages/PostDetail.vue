@@ -1,7 +1,7 @@
 <script setup>
 import ProfileCard from "../components/common/ProfileCard.vue";
 import Comment from "../components/common/Comment.vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { onMounted, ref } from "vue";
 import axios from "../api/axios";
 import { searchBooks } from "../api/kakao.js";
@@ -10,6 +10,8 @@ const route = useRoute();
 const boardId = route.params.boardId;
 const post = ref([]);
 const book_img = ref("");
+const isbn = ref("");
+const router = useRouter();
 
 onMounted(async () => {
   getPost();
@@ -18,7 +20,8 @@ onMounted(async () => {
 const getPost = async () => {
   const res = await axios.get("/api/board/" + boardId);
   post.value = res.data.data;
-  getImage(res.data.data.isbn);
+  isbn.value = res.data.data.isbn;
+  getImage(isbn.value);
 };
 
 const getImage = async (isbn) => {
@@ -29,6 +32,13 @@ const getImage = async (isbn) => {
     book_img.value =
       "https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F5291060%3Ftimestamp%3D20250623135402";
   }
+};
+
+const goPostDetail = (book) => {
+  router.push({
+    name: "BookDetail",
+    params: { isbn: isbn.value },
+  });
 };
 
 const getHighQualityThumbnail = (url) => {
@@ -82,8 +92,9 @@ function formatKoreanDateTime(isoString) {
         </div>
         <hr class="mb-16 border-t border-gray-300 w-4/5" />
         <img
+          @click="goPostDetail"
           :src="getHighQualityThumbnail(book_img)"
-          class="w-1/4 max-h-96 object-cover rounded mb-4"
+          class="w-1/4 max-h-96 object-cover cursor-pointer rounded mb-4"
         />
         <div class="text-base leading-relaxed whitespace-pre-line p-6 w-5/6">
           {{ post.content }}
@@ -95,7 +106,7 @@ function formatKoreanDateTime(isoString) {
         </div>
       </div>
     </div>
-    <div class="w-1/4 p-4 bg-[#f7f5f0]">
+    <div class="w-1/3 p-4 bg-[#f7f5f0]">
       <ProfileCard />
     </div>
   </div>
