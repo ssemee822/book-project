@@ -1,11 +1,12 @@
 <script setup>
 import { useRouter } from "vue-router";
 
+const router = useRouter();
+
 const props = defineProps({
   post: Object,
+  type: String,
 });
-
-const router = useRouter();
 
 const goCommunity = (id) => {
   router.push({
@@ -13,6 +14,20 @@ const goCommunity = (id) => {
     params: { boardId: id },
   });
 };
+
+function formatKoreanDateTime(isoString) {
+  const date = new Date(isoString);
+  const pad = (n) => String(n).padStart(2, "0");
+
+  const y = date.getFullYear();
+  const m = pad(date.getMonth() + 1);
+  const d = pad(date.getDate());
+  const h = pad(date.getHours());
+  const min = pad(date.getMinutes());
+  const s = pad(date.getSeconds());
+
+  return `${y}-${m}-${d} ${h}:${min}:${s}`;
+}
 </script>
 
 <template>
@@ -21,6 +36,7 @@ const goCommunity = (id) => {
     @click="goCommunity(post.boardId)"
   >
     <img
+      v-if="props.type != 'book'"
       :src="post.thumbnail"
       alt="thumbnail"
       class="w-20 h-28 object-cover rounded-md border"
@@ -32,7 +48,7 @@ const goCommunity = (id) => {
         </h2>
         <div class="text-sm text-gray-500 mb-1">
           <span class="mr-2">{{ post.username }}</span>
-          <span>{{ post.createdAt }}</span>
+          <span>{{ formatKoreanDateTime(post.createdAt) }}</span>
         </div>
         <div class="text-sm text-gray-500">
           <span class="mr-2">{{

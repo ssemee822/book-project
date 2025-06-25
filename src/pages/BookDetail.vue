@@ -8,14 +8,14 @@ import { searchBooks } from "../api/kakao.js";
 import axios from "../api/axios";
 
 const selectedTab = ref("comment");
+const route = useRoute();
+const isbn = route.params.isbn;
+const book = ref(null);
+const posts = ref([]);
 
 const selectTab = (tab) => {
   selectedTab.value = tab;
 };
-
-const route = useRoute();
-const isbn = route.params.isbn;
-const book = ref(null);
 
 onMounted(async () => {
   const result = await searchBooks(isbn, 1, "isbn");
@@ -30,7 +30,9 @@ const getHighQualityThumbnail = (url) => {
 
 const getPostList = async () => {
   const res = await axios.get(`/api/board/list/${isbn}`);
-  console.log(res);
+  const rawPosts = res.data.data.content;
+  posts.value = rawPosts;
+  console.log(posts);
 };
 </script>
 
@@ -149,7 +151,12 @@ const getPostList = async () => {
           <div>
             <Comment v-if="selectedTab === 'comment'" :isbn="isbn" />
             <div v-if="selectedTab === 'blog'" class="space-y-4">
-              <PostCard v-for="post in dummyData" :key="post.id" post="post" />
+              <PostCard
+                v-for="post in posts"
+                :key="post.boardId"
+                :post="post"
+                type="book"
+              />
             </div>
           </div>
         </div>

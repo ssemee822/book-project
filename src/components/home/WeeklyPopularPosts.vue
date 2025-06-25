@@ -1,12 +1,21 @@
 <script setup>
 import axios from "../../api/axios";
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const posts = ref([]);
 
 onMounted(() => {
   getPopularPostList();
 });
+
+const goCommunity = (id) => {
+  router.push({
+    name: "PostDetail",
+    params: { boardId: id },
+  });
+};
 
 const getPopularPostList = async () => {
   const res = await axios.get("/api/board/list?size=3");
@@ -18,6 +27,7 @@ const getPopularPostList = async () => {
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div
         v-for="post in posts"
+        @click="goCommunity(post.boardId)"
         :key="post.id"
         class="bg-white p-4 rounded-xl shadow hover:shadow-md transition cursor-pointer"
       >

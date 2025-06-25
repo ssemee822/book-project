@@ -40,6 +40,20 @@ const handleLike = async () => {
   const res = await axios.post(`/api/board/like/${boardId}`);
   getPost();
 };
+
+function formatKoreanDateTime(isoString) {
+  const date = new Date(isoString);
+  const pad = (n) => String(n).padStart(2, "0");
+
+  const y = date.getFullYear();
+  const m = pad(date.getMonth() + 1);
+  const d = pad(date.getDate());
+  const h = pad(date.getHours());
+  const min = pad(date.getMinutes());
+  const s = pad(date.getSeconds());
+
+  return `${y}-${m}-${d} ${h}:${min}:${s}`;
+}
 </script>
 <template>
   <div class="flex">
@@ -54,7 +68,7 @@ const handleLike = async () => {
         <h1 class="text-2xl font-bold mb-2 mt-4">{{ post.title }}</h1>
         <div class="text-sm text-gray-500 mb-1">{{ post.username }}</div>
         <div class="text-sm text-gray-500 mb-1">
-          {{ post.createdAt }}
+          {{ formatKoreanDateTime(post.createdAt) }}
         </div>
         <div class="text-sm text-gray-500 mb-6 flex items-center gap-2">
           좋아요 {{ post.likeCount }}

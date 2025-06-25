@@ -14,7 +14,6 @@ const props = defineProps({
 });
 
 onMounted(async () => {
-  console.log(props.isbn);
   if (props.isbn) getReviewList();
   else getCommentList();
 });
@@ -55,11 +54,25 @@ const postComment = async () => {
   newRating.value = 0;
   hoverRating.value = 0;
 };
+
+function formatKoreanDateTime(isoString) {
+  const date = new Date(isoString);
+  const pad = (n) => String(n).padStart(2, "0");
+
+  const y = date.getFullYear();
+  const m = pad(date.getMonth() + 1);
+  const d = pad(date.getDate());
+  const h = pad(date.getHours());
+  const min = pad(date.getMinutes());
+  const s = pad(date.getSeconds());
+
+  return `${y}-${m}-${d} ${h}:${min}:${s}`;
+}
 </script>
 
 <template>
   <div class="mb-4">
-    <div class="flex items-center mb-2">
+    <div class="flex items-center mb-2" v-if="props.isbn">
       <span
         v-for="n in 5"
         :key="n"
@@ -101,9 +114,11 @@ const postComment = async () => {
         {{ comment.comment }}
       </div>
       <div class="text-xs text-gray-400 mb-1">
-        {{ comment.createdAt }}
+        {{ formatKoreanDateTime(comment.createdAt) }}
       </div>
-      <div class="text-xs text-yellow-500">별점: {{ comment.rating }}점</div>
+      <div v-if="props.isbn" class="text-xs text-yellow-500">
+        별점: {{ comment.rating }}점
+      </div>
     </li>
   </ul>
 </template>
