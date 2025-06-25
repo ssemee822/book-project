@@ -8,6 +8,6 @@ export const registerUser = (userData) => {
   return apiClient.post("/auth/signup", userData);
 };
 
-export const logoutUser = (userData) => {
-  return apiClient.post("/auth/logout", userData);
+export const logoutUser = () => {
+  return apiClient.post("/auth/logout");
 };

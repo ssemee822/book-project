@@ -31,7 +31,7 @@ const goCommunity = () => {
     >
       <img src="/logo.png" class="w-40 inline-block mr-2" />
     </div>
-    <ul class="space-y-2 text-lg">
+    <ul class="space-y-2 text-lg mt-4">
       <li
         class="cursor-pointer p-2 text-center"
         :class="{

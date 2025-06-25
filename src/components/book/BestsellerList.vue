@@ -40,11 +40,11 @@ const getHighQualityThumbnail = (url) => {
 </script>
 
 <template>
-  <div class="space-y-10">
+  <div class="space-y-10" v-if="bookList != null">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div
         v-for="(book, idx) in topBooks"
-        :key="book.isbn"
+        :key="idx"
         @click="goToDetail(book)"
         class="relative cursor-pointer group"
       >
@@ -73,7 +73,7 @@ const getHighQualityThumbnail = (url) => {
     <div class="space-y-4">
       <div
         v-for="(book, index) in books"
-        :key="book.isbn"
+        :key="index"
         @click="goToDetail(book)"
         class="bg-white p-4 rounded-xl shadow flex gap-4 cursor-pointer hover:shadow-md"
       >
