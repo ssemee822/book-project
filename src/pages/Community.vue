@@ -3,6 +3,7 @@ import SearchBar from "../components/common/SearchBar.vue";
 import BaseButton from "../components/common/BaseButton.vue";
 import ProfileCard from "../components/common/ProfileCard.vue";
 import PostCard from "../components/community/PostCard.vue";
+import axios from "../api/axios";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 
@@ -14,71 +15,16 @@ const totalCount = ref(0);
 const pageSize = 5;
 const router = useRouter();
 
-const dummyData = [
-  {
-    id: 1,
-    title: "처음 올리는 게시글입니다",
-    contents:
-      "컨텐츠 내용입니다. 어쩌구 저쩌구 . 안녕안녕 안녕 안녕안녕 반가반가반가반가반가 안뇽ㄴ 테스트 테스트 테스트 테스트테스트테스트테스트테스트컨텐츠 내용입니다. 어쩌구 저쩌구 . 안녕안녕 안녕 안녕안녕 반가반가반가반가반가 안뇽ㄴ 테스트 테스트 테스트 테스트테스트테스트테스트테스트",
-    author: "김세민",
-    date: "2025-06-18",
-    views: 12,
-    image:
-      "https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6893954%3Ftimestamp%3D20250522155332",
-  },
-  {
-    id: 2,
-    title: "책 추천해주세요!",
-    author: "홍길동",
-    contents:
-      "컨텐츠 내용입니다. 어쩌구 저쩌구 . 안녕안녕 안녕 안녕안녕 반가반가반가반가반가 안뇽ㄴ 테스트 테스트 테스트 테스트테스트테스트테스트테스트",
-    date: "2025-06-17",
-    views: 30,
-    image:
-      "https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6893954%3Ftimestamp%3D20250522155332",
-  },
-  {
-    id: 3,
-    title: "이 책 내용 질문있어요",
-    contents:
-      "컨텐츠 내용입니다. 어쩌구 저쩌구 . 안녕안녕 안녕 안녕안녕 반가반가반가반가반가 안뇽ㄴ 테스트 테스트 테스트 테스트테스트테스트테스트테스트컨텐츠 내용입니다. 어쩌구 저쩌구 . 안녕안녕 안녕 안녕안녕 반가반가반가반가반가 안뇽ㄴ 테스트 테스트 테스트 테스트테스트테스트테스트테스트",
-    author: "이영희",
-    date: "2025-06-16",
-    views: 22,
-    image:
-      "https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6893954%3Ftimestamp%3D20250522155332",
-  },
-  {
-    id: 4,
-    contents:
-      "컨텐츠 내용입니다. 어쩌구 저쩌구 . 안녕안녕 안녕 안녕안녕 반가반가반가반가반가 안뇽ㄴ 테스트 테스트 테스트 테스트테스트테스트테스트테스트",
-    title: "좋은 문장 나눠요 😊",
-    author: "박하늘",
-    date: "2025-06-15",
-    views: 17,
-    image:
-      "https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6893954%3Ftimestamp%3D20250522155332",
-  },
-  {
-    id: 5,
-    title: "독서모임 모집합니다",
-    author: "최민수",
-    date: "2025-06-14",
-    views: 40,
-    image:
-      "https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6893954%3Ftimestamp%3D20250522155332",
-    contents: "tes",
-  },
-];
-
 onMounted(() => {
   handleSearch();
 });
 
-const handleSearch = () => {
-  posts.value = dummyData;
-  totalCount.value = dummyData.length;
-  totalPages.value = Math.ceil(dummyData.length / pageSize);
+const handleSearch = async () => {
+  const res = await axios.get("/api/board/list");
+  console.log(res.data.data.content);
+  posts.value = res.data.data.content;
+  totalCount.value = res.data.data.content.length;
+  totalPages.value = Math.ceil(res.data.data.content.length / pageSize);
 };
 
 const changePage = (page) => {

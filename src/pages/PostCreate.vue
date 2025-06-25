@@ -3,6 +3,7 @@ import { ref } from "vue";
 import BookSearch from "../components/common/BookSearch.vue";
 import BaseButton from "../components/common/BaseButton.vue";
 import axios from "../api/axios";
+import router from "../router";
 
 const title = ref("");
 const content = ref("");
@@ -30,7 +31,7 @@ const submitPost = async () => {
     return;
   }
 
-  await axios.post("/api/v1/board/post", {
+  await axios.post("/api/board/post", {
     type: "BOOK",
     title: title.value,
     content: content.value,
@@ -38,6 +39,7 @@ const submitPost = async () => {
   });
 
   alert("작성 완료!");
+  router.push("/community");
 };
 </script>
 
