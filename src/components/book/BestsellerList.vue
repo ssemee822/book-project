@@ -11,6 +11,7 @@ onMounted(() => {
 
 const getBestsellerList = async () => {
   const res = await axios.get("/api/book/best");
+  console.log(res);
   // books.value = res.data.data.content;
 };
 
