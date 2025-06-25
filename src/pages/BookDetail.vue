@@ -32,7 +32,6 @@ const getPostList = async () => {
   const res = await axios.get(`/api/board/list/${isbn}`);
   const rawPosts = res.data.data.content;
   posts.value = rawPosts;
-  console.log(posts);
 };
 </script>
 

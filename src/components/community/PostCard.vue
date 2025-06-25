@@ -47,8 +47,10 @@ function formatKoreanDateTime(isoString) {
           {{ post.title }}
         </h2>
         <div class="text-sm text-gray-500 mb-1">
-          <span class="mr-2">{{ post.username }}</span>
-          <span>{{ formatKoreanDateTime(post.createdAt) }}</span>
+          <span class="mr-2"
+            >{{ post.username }} ·
+            {{ formatKoreanDateTime(post.createdAt) }}</span
+          >
         </div>
         <div class="text-sm text-gray-500">
           <span class="mr-2">{{

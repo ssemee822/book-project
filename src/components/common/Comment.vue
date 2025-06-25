@@ -24,7 +24,8 @@ const getCommentList = async () => {
 };
 
 const getReviewList = async () => {
-  console.log("getReviewList");
+  const res = await axios.get(`/api/book/comment/${props.isbn}/list`);
+  comments.value = res.data.data;
 };
 
 const setRating = (n) => {
@@ -36,10 +37,11 @@ const postComment = async () => {
 
   if (props.isbn) {
     const body = {
+      isbn: props.isbn,
       content: newComment.value,
       rate: newRating.value || 0,
     };
-    console.log("postComment", body);
+    const res = await axios.post(`/api/book/comment/post`, body);
 
     getReviewList();
   } else {
@@ -110,14 +112,17 @@ function formatKoreanDateTime(isoString) {
       <div class="text-sm font-medium text-gray-800">
         {{ comment.username }}
       </div>
-      <div class="text-sm text-gray-600 mb-1">
+      <div class="text-sm text-gray-600 mb-1" v-if="props.isbn">
+        {{ comment.content }}
+      </div>
+      <div class="text-sm text-gray-600 mb-1" v-else>
         {{ comment.comment }}
       </div>
       <div class="text-xs text-gray-400 mb-1">
         {{ formatKoreanDateTime(comment.createdAt) }}
       </div>
       <div v-if="props.isbn" class="text-xs text-yellow-500">
-        별점: {{ comment.rating }}점
+        별점: {{ comment.rate }}점
       </div>
     </li>
   </ul>

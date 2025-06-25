@@ -4,26 +4,29 @@ import router from "../router";
 
 export const useAuthStore = defineStore("auth", {
   state: () => {
-    let token = null;
+    let accessToken = null;
     let isLogin = null;
     try {
-      const storedToken = localStorage.getItem("token");
+      const storedToken = localStorage.getItem("accessToken");
       isLogin = localStorage.getItem("isLogin");
 
       if (storedToken) {
-        token = storedToken;
+        accessToken = storedToken;
       }
     } catch (e) {
-      console.error("Error parsing user data or token from localStorage:", e);
-      localStorage.removeItem("token");
+      console.error(
+        "Error parsing user data or accessToken from localStorage:",
+        e
+      );
+      localStorage.removeItem("accessToken");
       localStorage.setItem("isLogin", false);
-      token = null;
+      accessToken = null;
     }
 
     return {
-      token: token,
+      accessToken: accessToken,
       isLogin: isLogin,
-      isAuthenticated: !!token,
+      isAuthenticated: !!accessToken,
       isLoading: false,
       error: null,
     };
@@ -34,13 +37,14 @@ export const useAuthStore = defineStore("auth", {
       this.error = null;
       try {
         const response = await loginUser(credentials);
-        const { token } = response.data;
+        const { accessToken, nickname } = response.data;
 
-        this.token = token;
+        this.accessToken = accessToken;
         this.isAuthenticated = true;
 
-        localStorage.setItem("token", token);
+        localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("isLogin", true);
+        localStorage.setItem("nickname", nickname);
 
         alert("로그인 성공!");
       } catch (err) {
@@ -70,11 +74,12 @@ export const useAuthStore = defineStore("auth", {
     },
 
     logout() {
-      this.token = null;
+      this.accessToken = null;
       this.isAuthenticated = false;
 
-      localStorage.removeItem("token");
+      localStorage.removeItem("accessToken");
       localStorage.setItem("isLogin", false);
+      localStorage.removeItem("nickname");
 
       alert("로그아웃되었습니다.");
     },

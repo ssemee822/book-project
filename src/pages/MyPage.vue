@@ -1,3 +1,108 @@
+<script setup>
+import BaseButton from "../components/common/BaseButton.vue";
+import BookSearch from "../components/common/BookSearch.vue";
+import "@fullcalendar/core/vdom";
+import FullCalendar from "@fullcalendar/vue3";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import koLocale from "@fullcalendar/core/locales/ko";
+import "@fullcalendar/common/main.css";
+import "@fullcalendar/daygrid/main.css";
+import { ref } from "vue";
+import axios from "../api/axios";
+
+const todoList = ref([]);
+const newTodo = ref({ title: "", start: "", end: "", isbn: "" });
+
+const handleBookSelect = (book) => {
+  console.log(book);
+  newTodo.value.title = book.title;
+  newTodo.value.isbn = book.isbn;
+};
+
+function addTodo() {
+  if (!newTodo.value.title || !newTodo.value.start) return;
+  const end = newTodo.value.end || newTodo.value.start;
+  const newItem = {
+    title: newTodo.value.title,
+    start: newTodo.value.start,
+    isbn: newTodo.value.isbn,
+    end,
+    done: false,
+  };
+  todoList.value.push(newItem);
+  calendarOptions.value.events.push({
+    title: newItem.title,
+    start: newItem.start,
+    isbn: newTodo.value.isbn,
+    end: newItem.end,
+    backgroundColor: "rgba(211, 228, 136, 0.6)",
+    borderColor: "white",
+    textColor: "#000",
+  });
+  console.log(newTodo.v);
+  uploadTodo();
+  newTodo.value = { title: "", start: "", end: "", isbn: "" };
+}
+
+const uploadTodo = async () => {
+  const accessToken = localStorage.getItem("accessToken");
+  const res = await axios.post(`/api/user/me/books`, {
+    memo: newTodo.value.title,
+    startRead: newTodo.value.start,
+    endRead: newTodo.value.end,
+    isbn: newTodo.value.isbn,
+  });
+  console.log(res);
+};
+
+function formatPeriod(start, end) {
+  return start === end ? start : `${start} ~ ${end}`;
+}
+
+const calendarOptions = ref({
+  plugins: [dayGridPlugin],
+  initialView: "dayGridMonth",
+  locale: "ko",
+  locales: [koLocale],
+  height: 600,
+  headerToolbar: {
+    left: "prev,next",
+    center: "title",
+    right: "today",
+  },
+  events: todoList.value.map((todo) => ({
+    title: todo.title,
+    start: todo.start,
+    end: todo.end,
+    backgroundColor: todo.done
+      ? "rgba(255, 231, 120, 0.6)"
+      : "rgba(211, 228, 136, 0.6)",
+    borderColor: "white",
+    textColor: "#000",
+  })),
+  eventDidMount(info) {
+    info.el.style.marginBottom = "4px";
+    info.el.style.padding = "2px 8px";
+    info.el.style.borderRadius = "6px";
+    info.el.style.transition = "all 0.2s";
+    info.el.onmouseenter = () => (info.el.style.filter = "brightness(1.05)");
+    info.el.onmouseleave = () => (info.el.style.filter = "brightness(1)");
+  },
+});
+
+function updateEventColor(todo) {
+  const event = calendarOptions.value.events.find(
+    (e) =>
+      e.title === todo.title && e.start === todo.start && e.end === todo.end
+  );
+  if (event) {
+    event.backgroundColor = todo.done
+      ? "rgba(255, 231, 120, 0.6)"
+      : "rgba(211, 228, 136, 0.6)";
+  }
+}
+</script>
+
 <template>
   <div class="flex min-h-screen bg-gray-50">
     <div class="flex-1 grid grid-cols-3 gap-6 p-6">
@@ -6,14 +111,15 @@
           <FullCalendar :options="calendarOptions" class="custom-calendar" />
         </div>
         <div class="bg-white rounded-xl shadow p-4 max-h-80 overflow-y-auto">
-          <h2 class="text-lg font-semibold mb-4">🗓 일정 투두 리스트</h2>
+          <h2 class="text-lg font-semibold mb-4">🗓 읽을 책 리스트</h2>
+          <BookSearch @select="handleBookSelect" class="mb-4" />
           <div class="mb-4 flex gap-2 items-center">
-            <input
+            <!-- <input
               v-model="newTodo.title"
               type="text"
               placeholder="할 일 제목"
               class="border rounded px-2 py-1 w-1/3"
-            />
+            /> -->
             <input
               v-model="newTodo.start"
               type="date"
@@ -68,103 +174,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import BaseButton from "../components/common/BaseButton.vue";
-import "@fullcalendar/core/vdom";
-import FullCalendar from "@fullcalendar/vue3";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import koLocale from "@fullcalendar/core/locales/ko";
-import "@fullcalendar/common/main.css";
-import "@fullcalendar/daygrid/main.css";
-import { ref } from "vue";
-
-const todoList = ref([
-  {
-    title: "독서 완료 - 사피엔스",
-    start: "2025-06-01",
-    end: "2025-06-05",
-    done: true,
-  },
-  {
-    title: "책 리뷰 작성",
-    start: "2025-06-04",
-    end: "2025-06-06",
-    done: false,
-  },
-  { title: "새 책 등록", start: "2025-06-12", end: "2025-06-12", done: true },
-]);
-
-const newTodo = ref({ title: "", start: "", end: "" });
-
-function addTodo() {
-  if (!newTodo.value.title || !newTodo.value.start) return;
-  const end = newTodo.value.end || newTodo.value.start;
-  const newItem = {
-    title: newTodo.value.title,
-    start: newTodo.value.start,
-    end,
-    done: false,
-  };
-  todoList.value.push(newItem);
-  calendarOptions.value.events.push({
-    title: newItem.title,
-    start: newItem.start,
-    end: newItem.end,
-    backgroundColor: "rgba(211, 228, 136, 0.6)",
-    borderColor: "white",
-    textColor: "#000",
-  });
-  newTodo.value = { title: "", start: "", end: "" };
-}
-
-function formatPeriod(start, end) {
-  return start === end ? start : `${start} ~ ${end}`;
-}
-
-const calendarOptions = ref({
-  plugins: [dayGridPlugin],
-  initialView: "dayGridMonth",
-  locale: "ko",
-  locales: [koLocale],
-  height: 600,
-  headerToolbar: {
-    left: "prev,next",
-    center: "title",
-    right: "today",
-  },
-  events: todoList.value.map((todo) => ({
-    title: todo.title,
-    start: todo.start,
-    end: todo.end,
-    backgroundColor: todo.done
-      ? "rgba(255, 231, 120, 0.6)"
-      : "rgba(211, 228, 136, 0.6)",
-    borderColor: "white",
-    textColor: "#000",
-  })),
-  eventDidMount(info) {
-    info.el.style.marginBottom = "4px";
-    info.el.style.padding = "2px 8px";
-    info.el.style.borderRadius = "6px";
-    info.el.style.transition = "all 0.2s";
-    info.el.onmouseenter = () => (info.el.style.filter = "brightness(1.05)");
-    info.el.onmouseleave = () => (info.el.style.filter = "brightness(1)");
-  },
-});
-
-function updateEventColor(todo) {
-  const event = calendarOptions.value.events.find(
-    (e) =>
-      e.title === todo.title && e.start === todo.start && e.end === todo.end
-  );
-  if (event) {
-    event.backgroundColor = todo.done
-      ? "rgba(255, 231, 120, 0.6)"
-      : "rgba(211, 228, 136, 0.6)";
-  }
-}
-</script>
 
 <style>
 .custom-calendar .fc {
