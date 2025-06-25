@@ -6,8 +6,6 @@ import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
 const route = useRoute();
 
-console.log(route);
-
 const selectedClickedItem = ref(null);
 
 const goHome = () => {

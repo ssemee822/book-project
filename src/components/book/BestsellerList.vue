@@ -1,4 +1,44 @@
-<template>
+<script setup>
+import { useRouter } from "vue-router";
+import { computed, onMounted, ref } from "vue";
+import axios from "../../api/axios";
+
+const books = ref([]);
+
+onMounted(() => {
+  getBestsellerList();
+});
+
+const getBestsellerList = async () => {
+  console.log("getBestsellerList");
+  const res = await axios.get("/api/book/best");
+  console.log(res);
+  // books.value = res.data.data.content;
+};
+
+// const props = defineProps({
+//   books: Array,
+// });
+
+// const router = useRouter();
+
+// const topBooks = computed(() => props.books.slice(0, 3));
+// const books = computed(() => props.books.slice(3));
+
+// const goToDetail = (book) => {
+//   router.push({
+//     name: "BookDetail",
+//     params: { isbn: book.isbn.split(" ")[0] },
+//   });
+// };
+
+// const getHighQualityThumbnail = (url) => {
+//   const match = url?.match(/fname=(.+)$/);
+//   return match ? decodeURIComponent(match[1]) : url;
+// };
+</script>
+
+<!-- <template>
   <div class="space-y-10">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div
@@ -69,33 +109,4 @@
       </div>
     </div>
   </div>
-</template>
-
-<script setup>
-import { useRouter } from "vue-router";
-import { computed } from "vue";
-
-const props = defineProps({
-  books: Array,
-});
-
-const router = useRouter();
-
-const topBooks = computed(() => props.books.slice(0, 3));
-const books = computed(() => props.books.slice(3));
-
-console.log(topBooks);
-
-const goToDetail = (book) => {
-  router.push({
-    name: "BookDetail",
-    params: { isbn: book.isbn.split(" ")[0] },
-  });
-};
-
-const getHighQualityThumbnail = (url) => {
-  console.log(url);
-  const match = url?.match(/fname=(.+)$/);
-  return match ? decodeURIComponent(match[1]) : url;
-};
-</script>
+</template> -->

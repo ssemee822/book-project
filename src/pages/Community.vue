@@ -16,10 +16,10 @@ const pageSize = 5;
 const router = useRouter();
 
 onMounted(() => {
-  handleSearch();
+  getCommunityList();
 });
 
-const handleSearch = async () => {
+const getCommunityList = async () => {
   const res = await axios.get("/api/board/list");
   console.log(res.data.data.content);
   posts.value = res.data.data.content;
@@ -42,8 +42,8 @@ const goPostCreate = () => {
   <div class="flex">
     <div class="flex-1 p-4">
       <div class="p-4 border-b mb-4 flex gap-2 items-center">
-        <SearchBar v-model="query" @search="handleSearch" class="flex-1" />
-        <BaseButton @click="handleSearch">검색</BaseButton>
+        <SearchBar v-model="query" @search="getCommunityList" class="flex-1" />
+        <BaseButton @click="getCommunityList">검색</BaseButton>
       </div>
 
       <div class="mb-4 text-lg font-semibold flex justify-between">

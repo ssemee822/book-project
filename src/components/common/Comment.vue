@@ -17,11 +17,9 @@ onMounted(async () => {
 const getCommentList = async () => {
   const res = await axios.get(`/api/board/${props.boardId}/comment/list`);
   comments.value = res.data.data;
-  console.log("getCommentList", comments.value);
 };
 
 const postComment = async () => {
-  console.log("postComment");
   const body = {
     content: newComment.value,
   };
@@ -29,7 +27,6 @@ const postComment = async () => {
     `/api/board/${props.boardId}/comment/post`,
     body
   );
-  console.log(res);
   getCommentList();
 };
 </script>

@@ -4,33 +4,11 @@ import BestsellerList from "../components/book/BestsellerList.vue";
 import SearchBar from "../components/common/SearchBar.vue";
 import ProfileCard from "../components/common/ProfileCard.vue";
 import BaseButton from "../components/common/BaseButton.vue";
-import { ref, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { searchBooks } from "../api/kakao.js";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 
-const query = ref("베스트");
-const books = ref([]);
-const currentPage = ref(1);
-const route = useRoute();
+const query = ref("");
 const router = useRouter();
-
-onMounted(() => {
-  search(1);
-});
-
-const search = async (page = 1) => {
-  currentPage.value = page;
-  router.replace({
-    query: {
-      ...route.query,
-      query: query.value,
-      page: page,
-    },
-  });
-
-  const result = await searchBooks(query.value, page);
-  books.value = result.documents;
-};
 
 const handleSearch = () => {
   router.push({
@@ -72,7 +50,7 @@ const handleSearch = () => {
       <h2 class="text-xl font-bold mb-4">🔥 주간 인기글</h2>
       <WeeklyPopularPosts class="mb-10" />
       <h2 class="text-xl font-bold mb-4">📅 베스트셀러</h2>
-      <BestsellerList :books="books" />
+      <BestsellerList />
     </div>
     <div class="w-1/4 p-4 bg-[#f7f5f0]">
       <ProfileCard />

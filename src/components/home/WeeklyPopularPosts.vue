@@ -1,3 +1,18 @@
+<script setup>
+import axios from "../../api/axios";
+import { ref, onMounted } from "vue";
+
+const posts = ref([]);
+
+onMounted(() => {
+  getPopularPostList();
+});
+
+const getPopularPostList = async () => {
+  const res = await axios.get("/api/board/list?size=3");
+  posts.value = res.data.data.content;
+};
+</script>
 <template>
   <div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -13,28 +28,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-const posts = [
-  {
-    id: 1,
-    title: "감명 깊은 문장을 공유해요",
-    author: "김독자",
-    content:
-      "“나 자신을 믿는 것이야말로 진정한 용기의 시작이다.” 라는 문장이 와닿았어요.",
-  },
-  {
-    id: 2,
-    title: "이 책 정말 최고입니다",
-    author: "책벌레",
-    content:
-      "올해 읽은 책 중에 가장 감동적인 책이었어요. 여러분께 강력 추천합니다!",
-  },
-  {
-    id: 3,
-    title: "같이 읽어요 😊",
-    author: "책모임장",
-    content: "이번 주 책모임에서 함께 읽을 책입니다. 미리 읽고 의견 나눠요!",
-  },
-];
-</script>

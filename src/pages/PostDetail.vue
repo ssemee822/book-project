@@ -12,10 +12,14 @@ const post = ref([]);
 const book_img = ref("");
 
 onMounted(async () => {
+  getPost();
+});
+
+const getPost = async () => {
   const res = await axios.get("/api/board/" + boardId);
   post.value = res.data.data;
   getImage(res.data.data.isbn);
-});
+};
 
 const getImage = async (isbn) => {
   const result = await searchBooks(isbn, 1, "isbn");
@@ -31,6 +35,11 @@ const getHighQualityThumbnail = (url) => {
   const match = url?.match(/fname=(.+)$/);
   return match ? decodeURIComponent(match[1]) : url;
 };
+
+const handleLike = async () => {
+  const res = await axios.post(`/api/board/like/${boardId}`);
+  getPost();
+};
 </script>
 <template>
   <div class="flex">
@@ -43,19 +52,23 @@ const getHighQualityThumbnail = (url) => {
       </button>
       <div class="flex flex-col items-center">
         <h1 class="text-2xl font-bold mb-2 mt-4">{{ post.title }}</h1>
-        <div class="text-sm text-gray-500 mb-1">
-          {{ post.author }}
-        </div>
+        <div class="text-sm text-gray-500 mb-1">글쓴이 {{ post.author }}</div>
         <div class="text-sm text-gray-500 mb-1">
           {{ post.createdAt }}
         </div>
-        <div class="text-sm text-gray-500 mb-6">
+        <div class="text-sm text-gray-500 mb-6 flex items-center gap-2">
           좋아요 {{ post.likeCount }}
+          <button
+            @click="handleLike"
+            :disabled="liked"
+            class="text-red-500 hover:text-red-600 transition disabled:opacity-40"
+          >
+            ❤️ 좋아요
+          </button>
         </div>
         <hr class="mb-16 border-t border-gray-300 w-4/5" />
         <img
           :src="getHighQualityThumbnail(book_img)"
-          alt="게시글 이미지"
           class="w-1/4 max-h-96 object-cover rounded mb-4"
         />
         <div class="text-base leading-relaxed whitespace-pre-line p-6 w-5/6">
