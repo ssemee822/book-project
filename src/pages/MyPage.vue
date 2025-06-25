@@ -7,7 +7,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import koLocale from "@fullcalendar/core/locales/ko";
 import "@fullcalendar/common/main.css";
 import "@fullcalendar/daygrid/main.css";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watchEffect } from "vue";
 import axios from "../api/axios";
 import ProfileCard from "../components/common/ProfileCard.vue";
 
@@ -20,14 +20,49 @@ onMounted(() => {
 
 const getTodoList = async () => {
   const res = await axios.get(`/api/user/me/books`);
-  console.log(res);
+  todoList.value = res.data.data;
 };
 
 const handleBookSelect = (book) => {
-  console.log(book);
   newTodo.value.title = book.title;
   newTodo.value.isbn = book.isbn;
 };
+
+const calendarOptions = ref({
+  plugins: [dayGridPlugin],
+  initialView: "dayGridMonth",
+  locale: "ko",
+  locales: [koLocale],
+  height: 600,
+  headerToolbar: {
+    left: "prev,next",
+    center: "title",
+    right: "today",
+  },
+  events: [],
+  eventDidMount(info) {
+    info.el.style.marginBottom = "4px";
+    info.el.style.padding = "2px 8px";
+    info.el.style.borderRadius = "6px";
+    info.el.style.transition = "all 0.2s";
+    info.el.onmouseenter = () => (info.el.style.filter = "brightness(1.05)");
+    info.el.onmouseleave = () => (info.el.style.filter = "brightness(1)");
+  },
+});
+
+watchEffect(() => {
+  calendarOptions.value.events = todoList.value.map((todo) => ({
+    title: todo.memo,
+    start: todo.startRead,
+    end: todo.endRead,
+    backgroundColor:
+      todo.status === "COMPLETED"
+        ? "rgba(255, 231, 120, 0.6)"
+        : "rgba(211, 228, 136, 0.6)",
+    borderColor: "white",
+    textColor: "#000",
+  }));
+});
 
 function addTodo() {
   if (!newTodo.value.title || !newTodo.value.start) return;
@@ -48,7 +83,6 @@ function addTodo() {
     borderColor: "white",
     textColor: "#000",
   });
-  console.log(newTodo.v);
   uploadTodo();
   newTodo.value = { title: "", start: "", end: "", isbn: "" };
 }
@@ -62,52 +96,22 @@ const uploadTodo = async () => {
     isbn: newTodo.value.isbn,
   };
   const res = await axios.post(`/api/user/me/books`, body);
+  getTodoList();
 };
 
 function formatPeriod(start, end) {
   return start === end ? start : `${start} ~ ${end}`;
 }
-
-const calendarOptions = ref({
-  plugins: [dayGridPlugin],
-  initialView: "dayGridMonth",
-  locale: "ko",
-  locales: [koLocale],
-  height: 600,
-  headerToolbar: {
-    left: "prev,next",
-    center: "title",
-    right: "today",
-  },
-  events: todoList.value.map((todo) => ({
-    title: todo.title,
-    start: todo.start,
-    end: todo.end,
-    backgroundColor: todo.done
-      ? "rgba(255, 231, 120, 0.6)"
-      : "rgba(211, 228, 136, 0.6)",
-    borderColor: "white",
-    textColor: "#000",
-  })),
-  eventDidMount(info) {
-    info.el.style.marginBottom = "4px";
-    info.el.style.padding = "2px 8px";
-    info.el.style.borderRadius = "6px";
-    info.el.style.transition = "all 0.2s";
-    info.el.onmouseenter = () => (info.el.style.filter = "brightness(1.05)");
-    info.el.onmouseleave = () => (info.el.style.filter = "brightness(1)");
-  },
-});
-
 function updateEventColor(todo) {
   const event = calendarOptions.value.events.find(
     (e) =>
       e.title === todo.title && e.start === todo.start && e.end === todo.end
   );
   if (event) {
-    event.backgroundColor = todo.done
-      ? "rgba(255, 231, 120, 0.6)"
-      : "rgba(211, 228, 136, 0.6)";
+    event.backgroundColor =
+      todo.status == "COMPLETED"
+        ? "rgba(255, 231, 120, 0.6)"
+        : "rgba(211, 228, 136, 0.6)";
   }
 }
 </script>
@@ -123,12 +127,6 @@ function updateEventColor(todo) {
           <h2 class="text-lg font-semibold mb-4">🗓 읽을 책 리스트</h2>
           <BookSearch @select="handleBookSelect" class="mb-4" />
           <div class="mb-4 flex gap-2 items-center">
-            <!-- <input
-              v-model="newTodo.title"
-              type="text"
-              placeholder="할 일 제목"
-              class="border rounded px-2 py-1 w-1/3"
-            /> -->
             <input
               v-model="newTodo.start"
               type="date"
@@ -149,12 +147,19 @@ function updateEventColor(todo) {
             >
               <input
                 type="checkbox"
-                v-model="todo.done"
+                :checked="todo.status === 'COMPLETED'"
                 @change="updateEventColor(todo)"
                 class="w-4 h-4"
               />
-              <span :class="{ 'line-through text-gray-400': todo.done }">
-                {{ todo.title }} ({{ formatPeriod(todo.start, todo.end) }})
+              <span
+                :class="
+                  // line-through text-gray-400
+                  todo.status == 'COMPLETED' ? '' : ''
+                "
+              >
+                {{ todo.memo }} ({{
+                  formatPeriod(todo.startRead, todo.endRead)
+                }})
               </span>
             </li>
           </ul>
