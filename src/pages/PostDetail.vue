@@ -19,7 +19,6 @@ const getPost = async () => {
   const res = await axios.get("/api/board/" + boardId);
   post.value = res.data.data;
   getImage(res.data.data.isbn);
-  console.log(post);
 };
 
 const getImage = async (isbn) => {
@@ -53,7 +52,7 @@ const handleLike = async () => {
       </button>
       <div class="flex flex-col items-center">
         <h1 class="text-2xl font-bold mb-2 mt-4">{{ post.title }}</h1>
-        <div class="text-sm text-gray-500 mb-1">글쓴이 {{ post.author }}</div>
+        <div class="text-sm text-gray-500 mb-1">{{ post.username }}</div>
         <div class="text-sm text-gray-500 mb-1">
           {{ post.createdAt }}
         </div>

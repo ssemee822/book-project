@@ -5,6 +5,5 @@ export const loginUser = (credentials) => {
 };
 
 export const registerUser = (userData) => {
-  console.log(userData);
   return apiClient.post("/auth/signup", userData);
 };

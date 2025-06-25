@@ -41,7 +41,6 @@ const search = async (page = 1) => {
   });
 
   const result = await searchBooks(query.value, page);
-  console.log(result);
   books.value = result.documents;
   totalPages.value = Math.ceil(result.meta.pageable_count / pageSize);
   totalCount.value = result.meta.total_count;

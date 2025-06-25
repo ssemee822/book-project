@@ -8,7 +8,6 @@ const props = defineProps({
 const router = useRouter();
 
 const goCommunity = (id) => {
-  console.log("id", id);
   router.push({
     name: "PostDetail",
     params: { boardId: id },
@@ -32,7 +31,7 @@ const goCommunity = (id) => {
           {{ post.title }}
         </h2>
         <div class="text-sm text-gray-500 mb-1">
-          <span class="mr-2">글쓴이-{{ post.userId }}</span>
+          <span class="mr-2">{{ post.username }}</span>
           <span>{{ post.createdAt }}</span>
         </div>
         <div class="text-sm text-gray-500">
