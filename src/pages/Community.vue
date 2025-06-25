@@ -6,6 +6,7 @@ import PostCard from "../components/community/PostCard.vue";
 import axios from "../api/axios";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { searchBooks } from "../api/kakao.js";
 
 const query = ref("");
 const posts = ref([]);
@@ -21,15 +22,33 @@ onMounted(() => {
 
 const getCommunityList = async () => {
   const res = await axios.get("/api/board/list");
-  console.log(res.data.data.content);
-  posts.value = res.data.data.content;
-  totalCount.value = res.data.data.content.length;
-  totalPages.value = Math.ceil(res.data.data.content.length / pageSize);
+  const rawPosts = res.data.data.content;
+
+  const thumbnailPromises = rawPosts.map((post) => getImage(post.isbn));
+  const thumbnails = await Promise.all(thumbnailPromises);
+
+  rawPosts.forEach((post, index) => {
+    post.thumbnail = thumbnails[index];
+  });
+
+  posts.value = rawPosts;
+  totalCount.value = rawPosts.length;
+  totalPages.value = Math.ceil(rawPosts.length / pageSize);
 };
 
 const changePage = (page) => {
   if (page >= 1 && page <= totalPages.value) {
     currentPage.value = page;
+  }
+};
+
+const getImage = async (isbn) => {
+  const result = await searchBooks(isbn, 1, "isbn");
+  if (result.meta.total_count > 0) {
+    const thumbnailUrl = result.documents[0].thumbnail;
+    return thumbnailUrl;
+  } else {
+    return "https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F5291060%3Ftimestamp%3D20250623135402";
   }
 };
 
