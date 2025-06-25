@@ -1,8 +1,8 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { useAuthStore } from "../../stores/auth";
-import axios from "../../api/axios";
+import { useAuthStore } from "../../stores/auth.js";
+import axios from "../../api/axios.js";
 import { searchBooks } from "../../api/kakao.js";
 
 const router = useRouter();
@@ -51,7 +51,7 @@ const goPostDetail = async (isbn) => {
 <template>
   <div>
     <div class="p-4">
-      <div class="flex justify-end mb-4" v-if="isLogin == 'true'">
+      <div class="flex justify-end mb-6" v-if="isLogin == 'true'">
         <button
           @click="logout"
           class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm rounded transition"
@@ -61,6 +61,7 @@ const goPostDetail = async (isbn) => {
       </div>
 
       <h2 class="text-lg font-bold mb-4">📚 내 서재</h2>
+      <hr class="border-gray-300 my-4" />
       <div class="text-sm text-gray-500 mb-2">
         읽은 책: {{ bookList ? bookList.length : "" }}권
       </div>
@@ -80,7 +81,7 @@ const goPostDetail = async (isbn) => {
           </p>
         </div>
       </div>
-      <hr class="border-gray-300 my-4" />
+      <img src="../../../public/ho.png" class="mt-10" />
     </div>
   </div>
 </template>

@@ -1,6 +1,6 @@
 <script setup>
 import Sidebar from "../components/common/Sidebar.vue";
-import ProfileCard from "../components/common/ProfileCard.vue";
+import ProfileCard from "../components/common/History.vue";
 import { RouterView } from "vue-router";
 </script>
 

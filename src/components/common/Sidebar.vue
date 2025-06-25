@@ -83,5 +83,6 @@ const isRoute = (...names) => names.includes(route.name);
     <div class="mt-10 text-xs text-gray-500 text-center px-2">
       “쭉정이와 함께 30권 달성 중 🎯”
     </div>
+    <img src="../../../public/coo.png" class="mt-10" />
   </div>
 </template>

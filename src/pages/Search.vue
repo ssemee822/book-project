@@ -62,7 +62,12 @@ const changePage = (page) => {
     <div class="flex-1 p-4">
       <div class="p-4 border-b mb-4 flex gap-2 items-center">
         <SearchBar v-model="query" @search="handleSearch" class="flex-1" />
-        <BaseButton @click="handleSearch">검색</BaseButton>
+        <BaseButton
+          @click="handleSearch"
+          class="h-[42px] px-6 bg-yellow-400 hover:bg-yellow-300 text-black font-bold rounded-full shadow"
+        >
+          검색
+        </BaseButton>
       </div>
       <div class="mb-4 text-lg font-semibold">
         <span class="text-[#9baa59] font-bold">'{{ keyword }}'</span>
