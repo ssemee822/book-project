@@ -1,5 +1,25 @@
+<script setup>
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import BaseButton from "../components/common/BaseButton.vue";
+import { useAuthStore } from "../stores/auth";
+
+const email = ref("");
+const password = ref("");
+const router = useRouter();
+const authStore = useAuthStore();
+
+const handleLogin = async () => {
+  await authStore.login({ email: email.value, password: password.value });
+  await router.push("/");
+  window.location.reload();
+};
+</script>
+
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div
+    class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8"
+  >
     <div class="max-w-md w-full space-y-8 p-10 bg-white rounded-lg shadow-md">
       <div>
         <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
@@ -7,7 +27,10 @@
         </h2>
         <p class="mt-2 text-center text-sm text-gray-600">
           계정이 없으신가요?
-          <router-link to="/signup" class="font-medium text-indigo-600 hover:text-indigo-500">
+          <router-link
+            to="/signup"
+            class="font-medium text-indigo-600 hover:text-indigo-500"
+          >
             회원가입
           </router-link>
         </p>
@@ -44,7 +67,10 @@
 
         <div class="flex items-center justify-between">
           <div class="text-sm">
-            <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
+            <a
+              href="#"
+              class="font-medium text-indigo-600 hover:text-indigo-500"
+            >
               비밀번호 찾기
             </a>
           </div>
@@ -56,32 +82,13 @@
             :disabled="authStore.isLoading"
             class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            {{ authStore.isLoading ? '로그인 중...' : '로그인' }}
+            {{ authStore.isLoading ? "로그인 중..." : "로그인" }}
           </BaseButton>
         </div>
-        <p v-if="authStore.error" class="text-red-500 text-sm text-center mt-2">{{ authStore.error }}</p>
+        <p v-if="authStore.error" class="text-red-500 text-sm text-center mt-2">
+          {{ authStore.error }}
+        </p>
       </form>
-
-      </div>
+    </div>
   </div>
 </template>
-
-<script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import BaseButton from '../components/common/BaseButton.vue';
-import { useAuthStore } from '../stores/auth';
-
-const email = ref('');
-const password = ref('');
-const router = useRouter();
-const authStore = useAuthStore();
-
-const handleLogin = async () => {
-  await authStore.login({ email: email.value, password: password.value });
-};
-
-</script>
-
-<style scoped>
-</style>

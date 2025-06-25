@@ -19,6 +19,7 @@ const getPost = async () => {
   const res = await axios.get("/api/board/" + boardId);
   post.value = res.data.data;
   getImage(res.data.data.isbn);
+  console.log(post);
 };
 
 const getImage = async (isbn) => {

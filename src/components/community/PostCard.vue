@@ -32,8 +32,8 @@ const goCommunity = (id) => {
           {{ post.title }}
         </h2>
         <div class="text-sm text-gray-500 mb-1">
-          <span class="mr-2">{{ post.author }}</span>
-          <span>{{ post.date }}</span>
+          <span class="mr-2">글쓴이-{{ post.userId }}</span>
+          <span>{{ post.createdAt }}</span>
         </div>
         <div class="text-sm text-gray-500">
           <span class="mr-2">{{
@@ -44,7 +44,7 @@ const goCommunity = (id) => {
         </div>
       </div>
       <div class="text-xs text-gray-400 text-right">
-        조회수 {{ post.views }}
+        좋아요 {{ post.likeCount }}
       </div>
     </div>
   </div>

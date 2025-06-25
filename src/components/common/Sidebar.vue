@@ -1,6 +1,5 @@
-\
 <script setup>
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
 const router = useRouter();
@@ -22,25 +21,6 @@ const goCommunity = () => {
   router.push("/community");
   selectedClickedItem.value = "community";
 };
-
-const goLogin = () => {
-  router.push("/login");
-  selectedClickedItem.value = "loginSignupBanner";
-};
-
-const goSignup = () => {
-  router.push("/signup");
-  selectedClickedItem.value = "loginSignupBanner";
-};
-
-const isLoginSignupBannerActive = computed(() => {
-  return route.name === "Login" || route.name === "Signup";
-});
-
-const clickLoginSignupBanner = () => {
-  router.push("/login");
-  selectedClickedItem.value = "loginSignupBanner";
-};
 </script>
 
 <template>
@@ -52,21 +32,6 @@ const clickLoginSignupBanner = () => {
       <img src="/logo.png" class="w-40 inline-block mr-2" />
     </div>
     <ul class="space-y-2 text-lg">
-      <li
-        class="cursor-pointer p-4 rounded-lg mb-4"
-        :class="{
-          'bg-[#e3c02b] text-white': isLoginSignupBannerActive,
-          'bg-[#9baa59] text-gray-200 hover:bg-[#9baa59]':
-            !isLoginSignupBannerActive,
-          'border-2 border-yellow-400':
-            selectedClickedItem === 'loginSignupBanner',
-        }"
-        @click="clickLoginSignupBanner"
-      >
-        <div class="font-bold text-xl mb-1">시작하기</div>
-        <div class="text-sm">로그인 / 회원가입</div>
-      </li>
-
       <li
         class="cursor-pointer p-2 text-center"
         :class="{

@@ -1,33 +1,28 @@
-import { defineStore } from 'pinia';
-import { loginUser, registerUser } from '../api/auth';
-import router from '../router';
+import { defineStore } from "pinia";
+import { loginUser, registerUser } from "../api/auth";
+import router from "../router";
 
-export const useAuthStore = defineStore('auth', {
+export const useAuthStore = defineStore("auth", {
   state: () => {
-    let user = null;
     let token = null;
-
+    let isLogin = null;
     try {
-      const storedUser = localStorage.getItem('user');
-      const storedToken = localStorage.getItem('token');
+      const storedToken = localStorage.getItem("token");
+      isLogin = localStorage.getItem("isLogin");
 
-      if (storedUser) {
-        user = JSON.parse(storedUser);
-      }
       if (storedToken) {
         token = storedToken;
       }
     } catch (e) {
       console.error("Error parsing user data or token from localStorage:", e);
-      localStorage.removeItem('user');
-      localStorage.removeItem('token');
-      user = null;
+      localStorage.removeItem("token");
+      localStorage.setItem("isLogin", false);
       token = null;
     }
 
     return {
-      user: user,
       token: token,
+      isLogin: isLogin,
       isAuthenticated: !!token,
       isLoading: false,
       error: null,
@@ -39,20 +34,20 @@ export const useAuthStore = defineStore('auth', {
       this.error = null;
       try {
         const response = await loginUser(credentials);
-        const { user, token } = response.data; 
+        const { token } = response.data;
 
-        this.user = user;
         this.token = token;
         this.isAuthenticated = true;
 
-        localStorage.setItem('user', JSON.stringify(user));
-        localStorage.setItem('token', token);
+        localStorage.setItem("token", token);
+        localStorage.setItem("isLogin", true);
 
-        alert('로그인 성공!');
-        router.push('/'); 
+        alert("로그인 성공!");
       } catch (err) {
-        this.error = err.response?.data?.message || '로그인 실패. 이메일 또는 비밀번호를 확인해주세요.';
-        console.error('Login error:', err);
+        this.error =
+          err.response?.data?.message ||
+          "로그인 실패. 이메일 또는 비밀번호를 확인해주세요.";
+        console.error("Login error:", err);
       } finally {
         this.isLoading = false;
       }
@@ -63,26 +58,25 @@ export const useAuthStore = defineStore('auth', {
       this.error = null;
       try {
         await registerUser(userData);
-        alert('회원가입 성공! 로그인 페이지로 이동합니다.');
-        router.push('/login');
+        alert("회원가입 성공! 로그인 페이지로 이동합니다.");
+        router.push("/login");
       } catch (err) {
-        this.error = err.response?.data?.message || '회원가입 실패. 다시 시도해주세요.';
-        console.error('Register error:', err);
+        this.error =
+          err.response?.data?.message || "회원가입 실패. 다시 시도해주세요.";
+        console.error("Register error:", err);
       } finally {
         this.isLoading = false;
       }
     },
 
     logout() {
-      this.user = null;
       this.token = null;
       this.isAuthenticated = false;
 
-      localStorage.removeItem('user');
-      localStorage.removeItem('token');
+      localStorage.removeItem("token");
+      localStorage.setItem("isLogin", false);
 
-      alert('로그아웃되었습니다.');
-      router.push('/login');
+      alert("로그아웃되었습니다.");
     },
   },
 });

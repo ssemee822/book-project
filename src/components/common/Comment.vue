@@ -48,8 +48,7 @@ const postComment = async () => {
       class="border-b pb-3"
     >
       <div class="text-sm font-medium text-gray-800">
-        글쓴이
-        {{ comment.userId }}
+        {{ comment.username }}
       </div>
       <div class="text-sm text-gray-600 mb-1">
         {{ comment.comment }}
