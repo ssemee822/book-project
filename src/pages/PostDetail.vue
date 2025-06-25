@@ -1,5 +1,4 @@
 <script setup>
-import ProfileCard from "../components/common/ProfileCard.vue";
 import Comment from "../components/common/Comment.vue";
 import { useRoute, useRouter } from "vue-router";
 import { onMounted, ref } from "vue";
@@ -105,9 +104,6 @@ function formatKoreanDateTime(isoString) {
           <Comment :boardId="boardId"></Comment>
         </div>
       </div>
-    </div>
-    <div class="w-1/3 p-4 bg-[#f7f5f0]">
-      <ProfileCard />
     </div>
   </div>
 </template>

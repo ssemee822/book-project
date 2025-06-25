@@ -9,9 +9,7 @@ const router = useRouter();
 const route = useRoute();
 const isLogin = ref("");
 const authStore = useAuthStore();
-const selectedClickedItem = ref(null);
 const bookList = ref();
-const nickname = localStorage.getItem("nickname");
 
 onMounted(() => {
   isLogin.value = authStore.isLogin;
@@ -34,15 +32,6 @@ const getImage = async (isbn) => {
   } else {
     return "https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F5291060%3Ftimestamp%3D20250623135402";
   }
-};
-
-const isLoginSignupBannerActive = computed(() => {
-  return route.name === "Login" || route.name === "Signup";
-});
-
-const clickLoginSignupBanner = () => {
-  router.push("/login");
-  selectedClickedItem.value = "loginSignupBanner";
 };
 
 const logout = async () => {

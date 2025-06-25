@@ -1,5 +1,4 @@
 <script setup>
-import ProfileCard from "../components/common/ProfileCard.vue";
 import Comment from "../components/common/Comment.vue";
 import PostCard from "../components/community/PostCard.vue";
 import { useRoute } from "vue-router";
@@ -160,10 +159,6 @@ const getPostList = async () => {
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="w-1/3 p-4 bg-[#f7f5f0]">
-      <ProfileCard />
     </div>
   </div>
 </template>

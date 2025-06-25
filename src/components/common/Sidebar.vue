@@ -7,6 +7,7 @@ const route = useRoute();
 const goHome = () => router.push("/");
 const goCommunity = () => router.push("/community");
 const goMyPage = () => router.push("/mypage");
+const nickname = localStorage.getItem("nickname");
 
 const isRoute = (...names) => names.includes(route.name);
 </script>
@@ -21,7 +22,7 @@ const isRoute = (...names) => names.includes(route.name);
       class="mb-6 flex flex-col items-center bg-white rounded-lg py-4 shadow"
     >
       <img src="/default_profile.png" class="w-12 h-12 rounded-full mb-2" />
-      <div class="text-sm font-bold text-black">김세민</div>
+      <div class="text-sm font-bold text-black">{{ nickname }}</div>
       <div class="text-xs text-gray-400">오늘도 좋은 독서 되세요 📖</div>
     </div>
 

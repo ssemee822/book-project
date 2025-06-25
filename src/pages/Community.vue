@@ -1,7 +1,6 @@
 <script setup>
 import SearchBar from "../components/common/SearchBar.vue";
 import BaseButton from "../components/common/BaseButton.vue";
-import ProfileCard from "../components/common/ProfileCard.vue";
 import PostCard from "../components/community/PostCard.vue";
 import axios from "../api/axios";
 import { ref, onMounted } from "vue";
@@ -92,10 +91,6 @@ const goPostCreate = () => {
           >다음</BaseButton
         >
       </div>
-    </div>
-
-    <div class="w-1/3 p-4 bg-[#f7f5f0]">
-      <ProfileCard />
     </div>
   </div>
 </template>

@@ -2,7 +2,6 @@
 import WeeklyPopularPosts from "../components/home/WeeklyPopularPosts.vue";
 import BestsellerList from "../components/book/BestsellerList.vue";
 import SearchBar from "../components/common/SearchBar.vue";
-import ProfileCard from "../components/common/ProfileCard.vue";
 import BaseButton from "../components/common/BaseButton.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
@@ -51,9 +50,6 @@ const handleSearch = () => {
       <WeeklyPopularPosts class="mb-10" />
       <h2 class="text-xl font-bold mb-4">📅 베스트셀러</h2>
       <BestsellerList />
-    </div>
-    <div class="w-1/3 p-4 bg-[#f7f5f0]">
-      <ProfileCard />
     </div>
   </div>
 </template>

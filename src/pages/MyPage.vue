@@ -9,7 +9,6 @@ import "@fullcalendar/common/main.css";
 import "@fullcalendar/daygrid/main.css";
 import { ref, onMounted, watchEffect } from "vue";
 import axios from "../api/axios";
-import ProfileCard from "../components/common/ProfileCard.vue";
 
 const todoList = ref([]);
 const newTodo = ref({ title: "", start: "", end: "", isbn: "" });
@@ -166,9 +165,6 @@ function updateEventColor(todo) {
           </ul>
         </div>
       </div>
-    </div>
-    <div class="w-1/3 p-4 bg-[#f7f5f0]">
-      <ProfileCard />
     </div>
   </div>
 </template>
