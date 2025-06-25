@@ -24,13 +24,20 @@ onMounted(() => {
   getImage(props.post.isbn);
 });
 
-const goCommunity = () => {
-  router.push("/post");
+const goCommunity = (id) => {
+  console.log("id", id);
+  router.push({
+    name: "PostDetail",
+    params: { boardId: id },
+  });
 };
 </script>
 
 <template>
-  <div class="flex bg-white rounded-xl shadow p-4 gap-4" @click="goCommunity">
+  <div
+    class="flex bg-white rounded-xl shadow p-4 gap-4"
+    @click="goCommunity(post.boardId)"
+  >
     <img
       :src="thumbnail"
       alt="thumbnail"
