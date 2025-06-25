@@ -49,6 +49,14 @@ const logout = () => {
   authStore.logout();
   window.location.reload();
 };
+
+const goPostDetail = async (isbn) => {
+  await router.push({
+    name: "BookDetail",
+    params: { isbn: isbn },
+  });
+  window.location.reload();
+};
 </script>
 
 <template>
@@ -102,7 +110,8 @@ const logout = () => {
         >
           <img
             :src="book.thumbnail"
-            class="w-20 h-28 object-cover rounded shadow"
+            class="w-20 h-28 object-cover rounded shadow cursor-pointer"
+            @click="goPostDetail(book.isbn)"
           />
           <p class="text-sm text-gray-700 mt-2 truncate w-20">
             {{ book.memo }}

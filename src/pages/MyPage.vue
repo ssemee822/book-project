@@ -97,6 +97,7 @@ const uploadTodo = async () => {
   };
   const res = await axios.post(`/api/user/me/books`, body);
   getTodoList();
+  window.location.reload();
 };
 
 function formatPeriod(start, end) {

@@ -162,7 +162,7 @@ const getPostList = async () => {
       </div>
     </div>
 
-    <div class="w-1/5 p-4 bg-[#f7f5f0]">
+    <div class="w-1/3 p-4 bg-[#f7f5f0]">
       <ProfileCard />
     </div>
   </div>
