@@ -2,42 +2,44 @@
 import { useRouter } from "vue-router";
 import { computed, onMounted, ref } from "vue";
 import axios from "../../api/axios";
+import { searchBooks } from "../../api/kakao.js";
 
-const books = ref([]);
+const bookList = ref([]);
+const isbnList = [
+  9788936439743, 9791141602376, 9788901294742, 9791142319730, 9791197221989,
+  9791162544259, 9791194413394, 9791142316760, 9791191114768, 9791194156222,
+];
 
 onMounted(() => {
   getBestsellerList();
+  console.log(bookList);
 });
 
 const getBestsellerList = async () => {
-  const res = await axios.get("/api/book/best");
-  console.log(res);
-  // books.value = res.data.data.content;
+  isbnList.forEach(async (isbn, index) => {
+    const res = await searchBooks(isbn, 1, "isbn");
+    bookList.value[index] = res.documents[0];
+  });
+};
+const router = useRouter();
+
+const topBooks = computed(() => bookList.value.slice(0, 3));
+const books = computed(() => bookList.value.slice(3));
+
+const goToDetail = (book) => {
+  router.push({
+    name: "BookDetail",
+    params: { isbn: book.isbn.split(" ")[0] },
+  });
 };
 
-// const props = defineProps({
-//   books: Array,
-// });
-
-// const router = useRouter();
-
-// const topBooks = computed(() => props.books.slice(0, 3));
-// const books = computed(() => props.books.slice(3));
-
-// const goToDetail = (book) => {
-//   router.push({
-//     name: "BookDetail",
-//     params: { isbn: book.isbn.split(" ")[0] },
-//   });
-// };
-
-// const getHighQualityThumbnail = (url) => {
-//   const match = url?.match(/fname=(.+)$/);
-//   return match ? decodeURIComponent(match[1]) : url;
-// };
+const getHighQualityThumbnail = (url) => {
+  const match = url?.match(/fname=(.+)$/);
+  return match ? decodeURIComponent(match[1]) : url;
+};
 </script>
 
-<!-- <template>
+<template>
   <div class="space-y-10">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div
@@ -67,7 +69,7 @@ const getBestsellerList = async () => {
       </div>
     </div>
 
-    <hr class="border-t border-gray-200 my-6" />
+    <hr class="border-t border-gray-200" />
     <div class="space-y-4">
       <div
         v-for="(book, index) in books"
@@ -108,4 +110,4 @@ const getBestsellerList = async () => {
       </div>
     </div>
   </div>
-</template> -->
+</template>

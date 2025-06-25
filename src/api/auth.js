@@ -7,3 +7,7 @@ export const loginUser = (credentials) => {
 export const registerUser = (userData) => {
   return apiClient.post("/auth/signup", userData);
 };
+
+export const logoutUser = (userData) => {
+  return apiClient.post("/auth/logout", userData);
+};

@@ -60,12 +60,7 @@ const goPostCreate = () => {
 <template>
   <div class="flex">
     <div class="flex-1 p-4">
-      <div class="p-4 border-b mb-4 flex gap-2 items-center">
-        <SearchBar v-model="query" @search="getCommunityList" class="flex-1" />
-        <BaseButton @click="getCommunityList">검색</BaseButton>
-      </div>
-
-      <div class="mb-4 text-lg font-semibold flex justify-between">
+      <div class="mt-6 mb-4 text-lg font-semibold flex justify-between">
         <div class="pl-4">
           총 <span class="text-[#9baa59]">{{ totalCount }}</span
           >개의 게시글이 있습니다

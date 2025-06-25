@@ -21,7 +21,7 @@ const handleLogin = async () => {
       class="w-1/2 bg-[#1a1d21] text-white flex flex-col justify-between p-8"
     >
       <div class="flex-grow flex flex-col justify-center items-center">
-        <div class="text-6xl font-light tracking-widest mb-3">쭉정이</div>
+        <div class="text-4xl font-light tracking-widest mb-3">쭉정이</div>
         <p class="text-sm text-gray-400">
           읽었다는 말 대신, 어떻게 읽었는지를 묻습니다.
         </p>

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { loginUser, registerUser } from "../api/auth";
+import { loginUser, registerUser, logoutUser } from "../api/auth";
 import router from "../router";
 
 export const useAuthStore = defineStore("auth", {
@@ -73,7 +73,9 @@ export const useAuthStore = defineStore("auth", {
       }
     },
 
-    logout() {
+    async logout() {
+      const response = await logoutUser();
+
       this.accessToken = null;
       this.isAuthenticated = false;
 
