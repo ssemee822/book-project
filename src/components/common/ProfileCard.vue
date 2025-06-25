@@ -45,8 +45,8 @@ const clickLoginSignupBanner = () => {
   selectedClickedItem.value = "loginSignupBanner";
 };
 
-const logout = () => {
-  authStore.logout();
+const logout = async () => {
+  await authStore.logout();
   window.location.reload();
 };
 
