@@ -21,7 +21,6 @@ onMounted(() => {
 const getTodoList = async () => {
   const res = await axios.get(`/api/user/me/books`);
   bookList.value = res.data.data;
-  console.log(bookList.value.length);
   for (const book of bookList.value) {
     book.thumbnail = await getImage(book.isbn);
   }

@@ -47,7 +47,7 @@ const handleSearch = () => {
         <SearchBar v-model="query" @search="handleSearch" class="flex-1" />
         <BaseButton @click="handleSearch">검색</BaseButton>
       </div>
-      <h2 class="text-xl font-bold mb-4">🔥 주간 인기글</h2>
+      <h2 class="text-xl font-bold mb-4">🔥 인기글</h2>
       <WeeklyPopularPosts class="mb-10" />
       <h2 class="text-xl font-bold mb-4">📅 베스트셀러</h2>
       <BestsellerList />

@@ -18,8 +18,8 @@ const goCommunity = (id) => {
 };
 
 const getPopularPostList = async () => {
-  const res = await axios.get("/api/board/list?size=3");
-  posts.value = res.data.data.content;
+  const res = await axios.get("/api/board/like/list");
+  posts.value = res.data.data.bookBoards.slice(0, 3);
 };
 </script>
 <template>
