@@ -60,44 +60,17 @@ const goPostDetail = async (isbn) => {
 </script>
 
 <template>
-  <div class="bg-white rounded-xl">
-    <div
-      class="p-6 shadow text-center flex items-center justify-between"
-      v-if="isLogin == 'true'"
-    >
-      <div class="flex items-center">
-        <img
-          class="w-16 h-16 rounded-full shadow-sm object-cover mr-4"
-          src="/default_profile.png"
-          alt="profile image"
-        />
-        <div class="text-gray-800 font-bold text-lg">{{ nickname }}</div>
+  <div>
+    <div class="p-4">
+      <div class="flex justify-end mb-4" v-if="isLogin == 'true'">
+        <button
+          @click="logout"
+          class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm rounded transition"
+        >
+          로그아웃
+        </button>
       </div>
 
-      <button
-        @click="logout"
-        class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm rounded transition"
-      >
-        로그아웃
-      </button>
-    </div>
-
-    <div
-      v-else
-      class="cursor-pointer p-4 rounded-lg mb-4"
-      :class="{
-        'bg-[#e3c02b] text-white': isLoginSignupBannerActive,
-        'bg-[#9baa59] text-gray-200 hover:bg-[#9baa59]':
-          !isLoginSignupBannerActive,
-        'border-2 border-yellow-400':
-          selectedClickedItem === 'loginSignupBanner',
-      }"
-      @click="clickLoginSignupBanner"
-    >
-      <div class="font-bold text-xl mb-1">시작하기</div>
-      <div class="text-sm">로그인 / 회원가입</div>
-    </div>
-    <div class="shadow p-4">
       <h2 class="text-lg font-bold mb-4">📚 내 서재</h2>
       <div class="text-sm text-gray-500 mb-2">
         읽은 책: {{ bookList ? bookList.length : "" }}권
@@ -118,6 +91,7 @@ const goPostDetail = async (isbn) => {
           </p>
         </div>
       </div>
+      <hr class="border-gray-300 my-4" />
     </div>
   </div>
 </template>

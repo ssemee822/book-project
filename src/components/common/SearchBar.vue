@@ -1,4 +1,3 @@
-<!-- SearchBar.vue -->
 <template>
   <input
     type="text"

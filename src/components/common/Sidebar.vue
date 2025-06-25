@@ -1,80 +1,86 @@
 <script setup>
-import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
 const router = useRouter();
 const route = useRoute();
 
-const selectedClickedItem = ref(null);
+const goHome = () => router.push("/");
+const goCommunity = () => router.push("/community");
+const goMyPage = () => router.push("/mypage");
 
-const goHome = () => {
-  router.push("/");
-  selectedClickedItem.value = "home";
-};
-
-const goMyPage = () => {
-  router.push("/mypage");
-  selectedClickedItem.value = "myPage";
-};
-
-const goCommunity = () => {
-  router.push("/community");
-  selectedClickedItem.value = "community";
-};
+const isRoute = (...names) => names.includes(route.name);
 </script>
 
 <template>
-  <div>
-    <div
-      class="text-[#e3c02b] text-xl font-bold mb-4 flex justify-center cursor-pointer"
-      @click="goHome"
-    >
-      <img src="/logo.png" class="w-40 inline-block mr-2" />
+  <div class="py-6 px-5 bg-[#f7f5f0] text-[#9baa59] font-medium">
+    <div class="mb-8 flex justify-center cursor-pointer" @click="goHome">
+      <img src="/logo.png" class="w-36" />
     </div>
-    <ul class="space-y-2 text-lg mt-4">
+
+    <div
+      class="mb-6 flex flex-col items-center bg-white rounded-lg py-4 shadow"
+    >
+      <img src="/default_profile.png" class="w-12 h-12 rounded-full mb-2" />
+      <div class="text-sm font-bold text-black">김세민</div>
+      <div class="text-xs text-gray-400">오늘도 좋은 독서 되세요 📖</div>
+    </div>
+
+    <hr class="border-gray-300 my-4" />
+
+    <ul class="space-y-2 text-base">
       <li
-        class="cursor-pointer p-2 text-center"
+        class="cursor-pointer px-4 py-2 rounded-md transition-all duration-150 flex items-center space-x-2"
         :class="{
-          'text-[#e3c02b] font-semibold':
-            route.name === 'Home' || route.name === 'BookDetail',
-          'text-[#9baa59] hover:font-semibold': !(
-            route.name === 'Home' || route.name === 'BookDetail'
+          'bg-[#e3c02b] text-white font-bold shadow': isRoute(
+            'Home',
+            'BookDetail'
           ),
-          'bg-gray-200': selectedClickedItem === 'home',
+          'hover:bg-[#e3c02b]/10 hover:text-[#e3c02b]': !isRoute(
+            'Home',
+            'BookDetail'
+          ),
         }"
         @click="goHome"
       >
-        홈
+        <span>🏠</span>
+        <span>홈</span>
       </li>
+
       <li
-        class="cursor-pointer p-2 text-center"
+        class="cursor-pointer px-4 py-2 rounded-md transition-all duration-150 flex items-center space-x-2"
         :class="{
-          'text-[#e3c02b] font-semibold':
-            route.name === 'Community' ||
-            route.name === 'PostDetail' ||
-            route.name === 'PostCreate',
-          'text-[#9baa59] hover:font-semibold': !(
-            route.name === 'Community' ||
-            route.name === 'PostDetail' ||
-            route.name === 'PostCreate'
+          'bg-[#e3c02b] text-white font-bold shadow': isRoute(
+            'Community',
+            'PostDetail',
+            'PostCreate'
           ),
-          'bg-gray-200': selectedClickedItem === 'community',
+          'hover:bg-[#e3c02b]/10 hover:text-[#e3c02b]': !isRoute(
+            'Community',
+            'PostDetail',
+            'PostCreate'
+          ),
         }"
         @click="goCommunity"
       >
-        Community
+        <span>💬</span>
+        <span>커뮤니티</span>
       </li>
+
       <li
-        class="cursor-pointer p-2 text-center"
+        class="cursor-pointer px-4 py-2 rounded-md transition-all duration-150 flex items-center space-x-2"
         :class="{
-          'text-[#e3c02b] font-semibold': route.name === 'MyPage',
-          'text-[#9baa59] hover:font-semibold': !(route.name === 'MyPage'),
-          'bg-gray-200': selectedClickedItem === 'myPage',
+          'bg-[#e3c02b] text-white font-bold shadow': isRoute('MyPage'),
+          'hover:bg-[#e3c02b]/10 hover:text-[#e3c02b]': !isRoute('MyPage'),
         }"
         @click="goMyPage"
       >
-        내 서재
+        <span>📚</span>
+        <span>내 서재</span>
       </li>
     </ul>
+
+    <div class="mt-10 text-xs text-gray-500 text-center px-2">
+      “쭉정이와 함께 30권 달성 중 🎯”
+    </div>
   </div>
 </template>
