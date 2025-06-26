@@ -257,4 +257,34 @@ const toggleForm = () => {
 .fc-daygrid-event {
   margin-bottom: 4px !important;
 }
+.fc .fc-header-toolbar {
+  padding: 0.5rem 0 !important;
+  margin-bottom: 0.5rem;
+}
+
+.fc .fc-toolbar-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.fc .fc-button {
+  background-color: transparent !important;
+  border: 1px solid #e5e7eb !important;
+  color: #4b5563 !important;
+  font-size: 0.875rem;
+  padding: 4px 8px !important;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.fc .fc-button:hover {
+  background-color: #facc15 !important;
+  color: black !important;
+  border-color: transparent !important;
+}
+
+.fc .fc-today-button {
+  background-color: #fef08a !important;
+  color: black !important;
+}
 </style>
