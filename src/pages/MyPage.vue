@@ -7,11 +7,36 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import koLocale from "@fullcalendar/core/locales/ko";
 import "@fullcalendar/common/main.css";
 import "@fullcalendar/daygrid/main.css";
-import { ref, onMounted, watchEffect } from "vue";
+import { ref, onMounted, watchEffect, watch } from "vue";
 import axios from "../api/axios";
 
 const todoList = ref([]);
 const newTodo = ref({ title: "", start: "", end: "", isbn: "" });
+const editedMemo = ref("");
+const editedStart = ref("");
+const editedEnd = ref("");
+const selectedEvent = ref("");
+const isEditModalOpen = ref("");
+
+watch(selectedEvent, (event) => {
+  if (event) {
+    editedMemo.value = event.title;
+    editedStart.value = event.startStr;
+    editedEnd.value = event.endStr;
+  }
+});
+
+const updateMemo = async () => {
+  const body = {
+    startRead: editedStart.value,
+    endRead: editedEnd.value,
+  };
+  const res = await axios.patch(
+    `/api/user/me/books/${selectedEvent.value.id}`,
+    body
+  );
+  window.location.reload();
+};
 
 onMounted(() => {
   getTodoList();
@@ -20,7 +45,6 @@ onMounted(() => {
 const getTodoList = async () => {
   const res = await axios.get(`/api/user/me/books`);
   todoList.value = res.data.data;
-  console.log(todoList);
 };
 
 const handleBookSelect = (book) => {
@@ -48,6 +72,10 @@ const calendarOptions = ref({
     info.el.onmouseenter = () => (info.el.style.filter = "brightness(1.05)");
     info.el.onmouseleave = () => (info.el.style.filter = "brightness(1)");
   },
+  eventClick(info) {
+    selectedEvent.value = info.event;
+    isEditModalOpen.value = true;
+  },
 });
 
 watchEffect(() => {
@@ -55,9 +83,10 @@ watchEffect(() => {
     title: todo.memo,
     start: todo.startRead,
     end: todo.endRead,
+    id: todo.historyId,
     backgroundColor:
       todo.status === "COMPLETED"
-        ? "rgba(255, 231, 120, 0.6)"
+        ? "rgba(220, 220, 220, 0.6)"
         : "rgba(211, 228, 136, 0.6)",
     borderColor: "white",
     textColor: "#000",
@@ -105,24 +134,18 @@ function formatPeriod(start, end) {
   return start === end ? start : `${start} ~ ${end}`;
 }
 const updateEvent = async (todo) => {
-  console.log(todo);
   if (todo.status == "COMPLETED") {
     const body = {
       status: "READING",
     };
     const res = await axios.patch(`/api/user/me/books/${todo.historyId}`, body);
-    console.log(res);
+  } else {
+    const body = {
+      status: "COMPLETED",
+    };
+    const res = await axios.patch(`/api/user/me/books/${todo.historyId}`, body);
   }
-  const event = calendarOptions.value.events.find(
-    (e) =>
-      e.title === todo.title && e.start === todo.start && e.end === todo.end
-  );
-  if (event) {
-    event.backgroundColor =
-      todo.status == "COMPLETED"
-        ? "rgba(255, 231, 120, 0.6)"
-        : "rgba(211, 228, 136, 0.6)";
-  }
+  window.location.reload();
 };
 const showForm = ref(false);
 
@@ -212,6 +235,44 @@ const toggleForm = () => {
             </li>
           </ul>
         </div>
+      </div>
+    </div>
+  </div>
+  <div
+    v-if="isEditModalOpen"
+    class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
+  >
+    <div class="bg-white p-6 rounded-lg w-[500px] shadow-lg">
+      <h2 class="text-lg font-bold mb-4">{{ editedMemo }}</h2>
+      <div class="mb-2">
+        <label class="text-xs text-gray-500">📅 읽기 시작</label>
+        <input
+          v-model="editedStart"
+          type="date"
+          class="w-full border px-2 py-1 rounded text-sm mt-1"
+        />
+      </div>
+      <div class="mb-4">
+        <label class="text-xs text-gray-500">📅 읽기 완료</label>
+        <input
+          v-model="editedEnd"
+          type="date"
+          class="w-full border px-2 py-1 rounded text-sm mt-1"
+        />
+      </div>
+      <div class="flex justify-end gap-2">
+        <button
+          @click="updateMemo"
+          class="bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-1 rounded"
+        >
+          저장
+        </button>
+        <button
+          @click="isEditModalOpen = false"
+          class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-1 rounded"
+        >
+          닫기
+        </button>
       </div>
     </div>
   </div>

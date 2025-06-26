@@ -11,6 +11,8 @@ const route = useRoute();
 const isbn = route.params.isbn;
 const book = ref(null);
 const posts = ref([]);
+const avgRate = ref();
+const rateList = ref([]);
 
 const selectTab = (tab) => {
   selectedTab.value = tab;
@@ -20,7 +22,14 @@ onMounted(async () => {
   const result = await searchBooks(isbn, 1, "isbn");
   book.value = result.documents[0];
   getPostList();
+  getRating();
 });
+
+const getRating = async () => {
+  const res = await axios.get(`/api/v1/books/${isbn}/rating`);
+  avgRate.value = res.data.data.averageScore;
+  rateList.value = res.data.data.scoreCounts;
+};
 
 const getHighQualityThumbnail = (url) => {
   const match = url?.match(/fname=(.+)$/);
@@ -112,21 +121,55 @@ const getPostList = async () => {
         </div>
       </div>
 
-      <div class="grid grid-cols-2 gap-6 mt-10">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
         <div
-          class="bg-white p-6 rounded shadow-md flex flex-col items-center text-center"
+          class="bg-white p-6 rounded-xl shadow flex flex-col items-center text-center justify-center"
         >
-          <div class="text-yellow-400 text-4xl">★</div>
-          <div class="text-2xl font-semibold mt-1">4.5</div>
+          <div>
+            <span
+              v-for="n in 5"
+              :key="n"
+              class="text-3xl"
+              :class="{
+                'text-yellow-400': n <= avgRate,
+                'text-gray-300': n > avgRate,
+              }"
+            >
+              ★
+            </span>
+          </div>
+          <div class="text-3xl font-bold mt-2 text-gray-800">
+            {{ avgRate }}
+          </div>
           <div class="text-sm text-gray-500">평균 별점</div>
         </div>
-
-        <div class="bg-white p-6 rounded shadow-md">
-          <h2 class="text-lg font-semibold mb-2">항목별 별점</h2>
-          <ul class="text-sm text-gray-700 space-y-1">
-            <li>📖 내용: 4.8</li>
-            <li>✍ 문체: 4.2</li>
-            <li>👁 가독성: 4.6</li>
+        <div class="bg-white p-6 rounded-xl shadow">
+          <h2 class="text-lg font-semibold mb-4 text-gray-800">항목별 별점</h2>
+          <ul>
+            <li
+              v-for="(rate, index) in rateList"
+              :key="index"
+              class="flex items-center justify-between"
+            >
+              <span class="text-sm text-gray-600 font-medium"
+                >{{ index }}점</span
+              >
+              <div class="flex items-center gap-2">
+                <span>
+                  <span
+                    v-for="n in 5"
+                    :key="n"
+                    class="text-xl"
+                    :class="{
+                      'text-yellow-400': n <= index,
+                      'text-gray-300': n > index,
+                    }"
+                    >★</span
+                  >
+                </span>
+                <span class="text-sm text-gray-500">{{ rate }}건</span>
+              </div>
+            </li>
           </ul>
         </div>
       </div>

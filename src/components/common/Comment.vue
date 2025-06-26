@@ -55,6 +55,7 @@ const postComment = async () => {
   newComment.value = "";
   newRating.value = 0;
   hoverRating.value = 0;
+  window.location.reload();
 };
 
 function formatKoreanDateTime(isoString) {
