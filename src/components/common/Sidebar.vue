@@ -1,15 +1,22 @@
 <script setup>
 import { useRouter, useRoute } from "vue-router";
+import { useAuthStore } from "../../stores/auth.js";
 
 const router = useRouter();
 const route = useRoute();
+const isLogin = localStorage.getItem("isLogin");
+const authStore = useAuthStore();
+const isRoute = (...names) => names.includes(route.name);
 
 const goHome = () => router.push("/");
 const goCommunity = () => router.push("/community");
 const goMyPage = () => router.push("/mypage");
 const nickname = localStorage.getItem("nickname");
 
-const isRoute = (...names) => names.includes(route.name);
+const logout = async () => {
+  await authStore.logout();
+  window.location.reload();
+};
 </script>
 
 <template>
@@ -24,6 +31,14 @@ const isRoute = (...names) => names.includes(route.name);
       <img src="/default_profile.png" class="w-12 h-12 rounded-full mb-2" />
       <div class="text-sm font-bold text-black">{{ nickname }}</div>
       <div class="text-xs text-gray-400">오늘도 좋은 독서 되세요 📖</div>
+      <div class="flex justify-end mt-2" v-if="isLogin == 'true'">
+        <div
+          class="text-xs underline text-gray-400 cursor-pointer hover:text-red-600"
+          @click="logout"
+        >
+          로그아웃
+        </div>
+      </div>
     </div>
 
     <hr class="border-gray-300 my-4" />

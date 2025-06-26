@@ -1,18 +1,13 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { useAuthStore } from "../../stores/auth.js";
 import axios from "../../api/axios.js";
 import { searchBooks } from "../../api/kakao.js";
 
 const router = useRouter();
-const route = useRoute();
-const isLogin = ref("");
-const authStore = useAuthStore();
 const bookList = ref();
 
 onMounted(() => {
-  isLogin.value = authStore.isLogin;
   getTodoList();
 });
 
@@ -34,11 +29,6 @@ const getImage = async (isbn) => {
   }
 };
 
-const logout = async () => {
-  await authStore.logout();
-  window.location.reload();
-};
-
 const goPostDetail = async (isbn) => {
   await router.push({
     name: "BookDetail",
@@ -51,15 +41,6 @@ const goPostDetail = async (isbn) => {
 <template>
   <div>
     <div class="p-4">
-      <div class="flex justify-end mb-6" v-if="isLogin == 'true'">
-        <button
-          @click="logout"
-          class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm rounded transition"
-        >
-          로그아웃
-        </button>
-      </div>
-
       <h2 class="text-lg font-bold mb-4">📚 내 서재</h2>
       <hr class="border-gray-300 my-4" />
       <div class="text-sm text-gray-500 mb-2">
