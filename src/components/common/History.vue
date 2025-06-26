@@ -46,22 +46,30 @@ const goPostDetail = async (isbn) => {
       <div class="text-sm text-gray-500 mb-2">
         읽은 책: {{ bookList ? bookList.length : "" }}권
       </div>
-      <div class="grid grid-cols-4 gap-4 max-h-[450px] overflow-y-auto">
+      <div class="grid grid-cols-3 gap-4 max-h-[450px] overflow-y-auto">
         <div
           v-for="book in bookList"
           :key="book.historyId"
-          class="flex flex-col items-center text-center"
+          class="relative group cursor-pointer"
+          @click="goPostDetail(book.isbn)"
         >
           <img
             :src="book.thumbnail"
-            class="w-20 h-28 object-cover rounded shadow cursor-pointer"
-            @click="goPostDetail(book.isbn)"
+            class="object-cover rounded shadow transition duration-200"
           />
-          <p class="text-sm text-gray-700 mt-2 truncate w-20">
-            {{ book.memo }}
-          </p>
+
+          <div
+            class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-60 rounded flex items-center justify-center transition duration-200"
+          >
+            <p
+              class="text-white text-xs font-semibold opacity-0 group-hover:opacity-100 transition duration-200 text-center px-2"
+            >
+              {{ book.memo }}
+            </p>
+          </div>
         </div>
       </div>
+
       <!-- <img src="../../../public/ho.png" class="mt-10" /> -->
     </div>
   </div>
