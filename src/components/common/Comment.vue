@@ -111,7 +111,7 @@ function formatKoreanDateTime(isoString) {
     >
       <div class="text-m font-medium text-gray-800 mb-1">
         {{ comment.username }}
-        <span class="ml-1" v-if="props.isbn">
+        <span v-if="props.isbn" class="ml-1">
           <span
             v-for="n in 5"
             class="text-sm"
@@ -129,7 +129,7 @@ function formatKoreanDateTime(isoString) {
           {{ comment.content }}
         </div>
       </div>
-      <div class="text-sm text-gray-600 mb-1" v-else>
+      <div v-else class="text-sm text-gray-600 mb-1">
         {{ comment.comment }}
       </div>
       <div class="text-xs text-gray-400 mb-1">

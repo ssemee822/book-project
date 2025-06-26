@@ -37,9 +37,9 @@ const getPostList = async () => {
 <template>
   <div class="flex min-h-screen bg-[#fefdfb]">
     <div class="flex-1 p-10">
-      <div class="flex gap-8" v-if="book != null">
+      <div class="flex gap-6" v-if="book != null">
         <div
-          class="w-64 h-96 bg-white rounded-xl shadow flex items-center justify-center"
+          class="w-64 bg-white rounded-xl shadow flex items-center justify-center"
         >
           <img
             :src="getHighQualityThumbnail(book.thumbnail)"
@@ -82,14 +82,23 @@ const getPostList = async () => {
             </div>
           </div>
           <hr />
-          <div class="text-gray-700 grid grid-cols-2 gap-4 text-sm">
-            <div class="flex items-center gap-2 col-span-2">
+          <div class="text-gray-700 gap-4 text-sm grid grid-cols-2">
+            <div class="flex items-center gap-2">
               <span class="font-medium text-gray-500">🔗</span>
               <a
                 :href="book.url"
                 target="_blank"
                 class="text-blue-600 underline hover:text-blue-800"
                 >카카오 책 페이지로 이동</a
+              >
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="font-medium text-gray-500">🔗</span>
+              <a
+                :href="'https://search.kyobobook.co.kr/search?keyword=' + isbn"
+                target="_blank"
+                class="text-blue-600 underline hover:text-blue-800"
+                >책 구매 페이지로 이동</a
               >
             </div>
           </div>
