@@ -21,6 +21,7 @@ const getPost = async () => {
   post.value = res.data.data;
   isbn.value = res.data.data.isbn;
   getImage(isbn.value);
+  console.log(post.value);
 };
 
 const getImage = async (isbn) => {
@@ -83,10 +84,15 @@ function formatKoreanDateTime(isoString) {
           좋아요 {{ post.likeCount }}
           <button
             @click="handleLike"
-            :disabled="liked"
-            class="text-red-500 hover:text-red-600 transition disabled:opacity-40"
+            class="transition disabled:opacity-40 underline"
+            :class="
+              post.isLiked
+                ? 'text-red-500 hover:text-red-600 '
+                : 'text-black-500 hover:text-black-600 '
+            "
           >
-            ❤️ 좋아요
+            {{ post.isLiked ? "❤️" : "🖤" }}
+            좋아요
           </button>
         </div>
         <hr class="mb-16 border-t border-gray-300 w-4/5" />

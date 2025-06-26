@@ -94,7 +94,7 @@ const uploadTodo = async () => {
     startRead: newTodo.value.start,
     endRead: newTodo.value.end,
     isbn: newTodo.value.isbn,
-    status: "EXPECTED",
+    status: "READING",
   };
   const res = await axios.post(`/api/user/me/books`, body);
   getTodoList();
@@ -108,7 +108,7 @@ const updateEvent = async (todo) => {
   console.log(todo);
   if (todo.status == "COMPLETED") {
     const body = {
-      status: "EXPECTED",
+      status: "READING",
     };
     const res = await axios.patch(`/api/user/me/books/${todo.historyId}`, body);
     console.log(res);
