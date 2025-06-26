@@ -6,7 +6,7 @@
         v-model="query"
         @keyup.enter="handleSearch"
         placeholder="책 제목을 입력하세요"
-        class="flex-1 border rounded-xl p-3 focus:outline-none focus:ring focus:ring-yellow-300"
+        class="flex-1 h-10 border rounded-xl p-3 focus:outline-none focus:ring focus:ring-yellow-300"
       />
       <BaseButton @click="handleSearch">검색</BaseButton>
     </div>
