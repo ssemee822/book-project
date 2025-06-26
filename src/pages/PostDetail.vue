@@ -11,6 +11,9 @@ const post = ref([]);
 const book_img = ref("");
 const isbn = ref("");
 const router = useRouter();
+const showMenu = ref(false);
+const nickname = localStorage.getItem("nickname");
+const isMe = ref(false);
 
 onMounted(async () => {
   getPost();
@@ -22,6 +25,7 @@ const getPost = async () => {
   isbn.value = res.data.data.isbn;
   getImage(isbn.value);
   console.log(post.value);
+  isMe.value = nickname === post.value.username;
 };
 
 const getImage = async (isbn) => {
@@ -51,6 +55,11 @@ const handleLike = async () => {
   getPost();
 };
 
+const handleDelete = async () => {
+  const res = await axios.delete(`/api/board/delete/${boardId}`);
+  router.push("/community");
+};
+
 function formatKoreanDateTime(isoString) {
   const date = new Date(isoString);
   const pad = (n) => String(n).padStart(2, "0");
@@ -67,13 +76,30 @@ function formatKoreanDateTime(isoString) {
 </script>
 <template>
   <div class="flex">
-    <div class="max-w-3xl mx-auto flex-1">
-      <button
-        @click="$emit('go-back')"
-        class="text-[#9baa59] text-sm mb-4 hover:underline"
-      >
-        <!-- ← 목록으로 돌아가기 -->
-      </button>
+    <div class="max-w-3xl mx-auto flex-1 mt-8">
+      <div v-if="isMe" class="relative flex justify-end">
+        <button
+          @click="showMenu = !showMenu"
+          class="text-2xl text-gray-600 hover:text-black px-2"
+        >
+          ⋯
+        </button>
+        <div
+          v-if="showMenu"
+          class="absolute right-0 mt-8 w-32 bg-white border border-gray-200 rounded-lg shadow-lg z-50"
+        >
+          <ul class="text-sm text-gray-700 divide-y divide-gray-100">
+            <li>
+              <button
+                class="w-full flex items-center px-4 py-2 hover:bg-red-100 text-red-500"
+                @click="handleDelete"
+              >
+                🗑️ <span class="ml-2">삭제</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
       <div class="flex flex-col items-center">
         <h1 class="text-2xl font-bold mb-2 mt-4">{{ post.title }}</h1>
         <div class="text-sm text-gray-500 mb-1">{{ post.username }}</div>
