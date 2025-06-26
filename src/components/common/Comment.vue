@@ -109,20 +109,31 @@ function formatKoreanDateTime(isoString) {
       :key="comment.boardCid"
       class="border-b pb-3"
     >
-      <div class="text-sm font-medium text-gray-800">
+      <div class="text-m font-medium text-gray-800 mb-1">
         {{ comment.username }}
+        <span class="ml-1">
+          <span
+            v-for="n in 5"
+            class="text-sm"
+            :class="{
+              'text-yellow-400': n <= comment.rate,
+              'text-gray-300': n > comment.rate,
+            }"
+          >
+            ★
+          </span>
+        </span>
       </div>
-      <div class="text-sm text-gray-600 mb-1" v-if="props.isbn">
-        {{ comment.content }}
+      <div v-if="props.isbn">
+        <div class="text-sm text-gray-600 mb-1">
+          {{ comment.content }}
+        </div>
       </div>
       <div class="text-sm text-gray-600 mb-1" v-else>
         {{ comment.comment }}
       </div>
       <div class="text-xs text-gray-400 mb-1">
         {{ formatKoreanDateTime(comment.createdAt) }}
-      </div>
-      <div v-if="props.isbn" class="text-xs text-yellow-500">
-        별점: {{ comment.rate }}점
       </div>
     </li>
   </ul>

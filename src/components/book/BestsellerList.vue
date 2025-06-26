@@ -29,7 +29,7 @@ const books = computed(() => bookList.value.slice(3));
 const goToDetail = (book) => {
   router.push({
     name: "BookDetail",
-    params: { isbn: book.isbn.split(" ")[0] },
+    params: { isbn: book.isbn.split(" ")[1] },
   });
 };
 
