@@ -58,13 +58,17 @@ const goPostCreate = () => {
 
 <template>
   <div class="flex">
-    <div class="flex-1 p-4">
-      <div class="mt-6 mb-4 text-lg font-semibold flex justify-between">
-        <div class="pl-4">
+    <div class="flex-1 px-4 py-6 sm:px-6 lg:px-8">
+      <div
+        class="mb-4 text-base sm:text-lg font-semibold flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3"
+      >
+        <div class="pl-1 sm:pl-4">
           총 <span class="text-[#9baa59]">{{ totalCount }}</span
           >개의 게시글이 있습니다
         </div>
-        <BaseButton @click="goPostCreate">글쓰기</BaseButton>
+        <BaseButton @click="goPostCreate" class="w-[100%] sm:w-auto">
+          글쓰기
+        </BaseButton>
       </div>
 
       <div class="space-y-3">

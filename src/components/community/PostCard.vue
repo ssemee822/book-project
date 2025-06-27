@@ -28,39 +28,48 @@ function formatKoreanDateTime(isoString) {
 
   return `${y}-${m}-${d} ${h}:${min}:${s}`;
 }
+
+const getHighQualityThumbnail = (url) => {
+  const match = url?.match(/fname=(.+)$/);
+  return match ? decodeURIComponent(match[1]) : url;
+};
 </script>
 
 <template>
   <div
-    class="flex bg-white rounded-xl shadow p-4 gap-4"
+    class="flex flex-col sm:flex-row bg-white rounded-xl shadow p-4 gap-4 cursor-pointer hover:bg-gray-50 transition"
     @click="goCommunity(post.boardId)"
   >
     <img
       v-if="props.type != 'book'"
-      :src="post.thumbnail"
+      :src="getHighQualityThumbnail(post.thumbnail)"
       alt="thumbnail"
-      class="w-20 h-28 object-cover rounded-md border"
+      class="w-full h-52 sm:w-20 sm:h-28 object-contain rounded-md border bg-white"
     />
     <div class="flex flex-col justify-between flex-1">
       <div>
-        <h2 class="font-semibold leading-snug text-gray-800 mb-1 truncate">
+        <h2
+          class="font-semibold leading-snug text-gray-800 mb-1 truncate text-base sm:text-lg"
+        >
           {{ post.title }}
         </h2>
         <div class="text-sm text-gray-500 mb-1">
-          <span class="mr-2"
-            >{{ post.username }} ·
-            {{ formatKoreanDateTime(post.createdAt) }}</span
-          >
+          <span class="mr-2">
+            {{ post.username }} · {{ formatKoreanDateTime(post.createdAt) }}
+          </span>
         </div>
         <div class="text-sm text-gray-500">
-          <span class="mr-2">{{
-            post.content.length > 130
-              ? post.content.slice(0, 130) + "..."
-              : post.content
-          }}</span>
+          <span class="mr-2">
+            {{
+              post.content.length > (isMobile ? 80 : 130)
+                ? post.content.slice(0, isMobile ? 80 : 130) + "..."
+                : post.content
+            }}
+          </span>
         </div>
       </div>
-      <div class="text-xs text-gray-400 text-right">
+
+      <div class="text-xs text-gray-400 text-right mt-2 sm:mt-0">
         좋아요 {{ post.likeCount }}
       </div>
     </div>

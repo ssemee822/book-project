@@ -20,8 +20,18 @@ const logout = async () => {
 </script>
 
 <template>
-  <div class="py-6 px-5 bg-[#f7f5f0] text-[#9baa59] font-medium">
-    <div class="mb-8 flex justify-center cursor-pointer" @click="goHome">
+  <div
+    class="px-0 sm:px-1 md:px-2 py-0 md:py-2 sm:py-4 bg-[#f7f5f0] text-[#9baa59] font-medium"
+  >
+    <div
+      class="mb-8 flex justify-center cursor-pointer opacity-0 sm:opacity-100 h-10 sm:h-auto"
+      @click="
+        () => {
+          goHome();
+          $emit('close-sidebar');
+        }
+      "
+    >
       <img src="/logo.png" class="w-36" />
     </div>
 
@@ -56,7 +66,12 @@ const logout = async () => {
             'BookDetail'
           ),
         }"
-        @click="goHome"
+        @click="
+          () => {
+            goHome();
+            $emit('close-sidebar');
+          }
+        "
       >
         <span>🏠</span>
         <span>홈</span>
@@ -76,7 +91,12 @@ const logout = async () => {
             'PostCreate'
           ),
         }"
-        @click="goCommunity"
+        @click="
+          () => {
+            goCommunity();
+            $emit('close-sidebar');
+          }
+        "
       >
         <span>💬</span>
         <span>커뮤니티</span>
@@ -88,7 +108,12 @@ const logout = async () => {
           'bg-[#e3c02b] text-white font-bold shadow': isRoute('MyPage'),
           'hover:bg-[#e3c02b]/10 hover:text-[#e3c02b]': !isRoute('MyPage'),
         }"
-        @click="goMyPage"
+        @click="
+          () => {
+            goMyPage();
+            $emit('close-sidebar');
+          }
+        "
       >
         <span>📚</span>
         <span>내 서재</span>

@@ -1,7 +1,7 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { computed, onMounted, ref } from "vue";
-import axios from "../../api/axios";
+import axios from "../../api/axios.js";
 import { searchBooks } from "../../api/kakao.js";
 
 const bookList = ref([]);
@@ -12,7 +12,6 @@ const isbnList = [
 
 onMounted(() => {
   getBestsellerList();
-  console.log(bookList);
 });
 
 const getBestsellerList = async () => {
@@ -53,7 +52,7 @@ const getHighQualityThumbnail = (url) => {
             getHighQualityThumbnail(book.thumbnail) ||
             'https://via.placeholder.com/300x400?text=No+Image'
           "
-          class="w-full h-[400px] object-cover rounded-xl shadow-lg group-hover:shadow-2xl transition"
+          class="w-full h-[300px] object-contain rounded-xl shadow-lg group-hover:shadow-2xl transition"
         />
         <div
           class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white p-4 rounded-b-xl"

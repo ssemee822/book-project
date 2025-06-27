@@ -46,9 +46,9 @@ const getPostList = async () => {
 <template>
   <div class="flex min-h-screen bg-[#fefdfb]">
     <div class="flex-1 p-10">
-      <div class="flex gap-6" v-if="book != null">
+      <div class="flex flex-col md:flex-row gap-6" v-if="book != null">
         <div
-          class="w-64 bg-white rounded-xl shadow flex items-center justify-center"
+          class="w-full md:w-64 bg-white rounded-xl shadow flex items-center justify-center"
         >
           <img
             :src="getHighQualityThumbnail(book.thumbnail)"
@@ -58,8 +58,13 @@ const getPostList = async () => {
         </div>
 
         <div class="flex-1 space-y-4">
-          <h1 class="text-3xl font-bold text-gray-900">{{ book.title }}</h1>
-          <div class="text-gray-700 grid grid-cols-2 gap-4 text-sm">
+          <h1 class="text-2xl md:text-3xl font-bold text-gray-900">
+            {{ book.title }}
+          </h1>
+
+          <div
+            class="text-gray-700 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm"
+          >
             <div class="flex items-center gap-2">
               <span class="font-medium text-gray-500">👤 저자</span>
               <span>{{ book.authors?.join(", ") }}</span>
@@ -76,7 +81,7 @@ const getPostList = async () => {
               <span class="font-medium text-gray-500">📅 출판일</span>
               <span>{{ book.datetime?.slice(0, 10) }}</span>
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 col-span-full">
               <span class="font-medium text-gray-500">💰 가격</span>
               <span>
                 <span class="line-through text-red-500"
@@ -90,16 +95,21 @@ const getPostList = async () => {
               </span>
             </div>
           </div>
+
           <hr />
-          <div class="text-gray-700 gap-4 text-sm grid grid-cols-2">
+
+          <div
+            class="text-gray-700 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm"
+          >
             <div class="flex items-center gap-2">
               <span class="font-medium text-gray-500">🔗</span>
               <a
                 :href="book.url"
                 target="_blank"
                 class="text-blue-600 underline hover:text-blue-800"
-                >카카오 책 페이지로 이동</a
               >
+                카카오 책 페이지로 이동
+              </a>
             </div>
             <div class="flex items-center gap-2">
               <span class="font-medium text-gray-500">🔗</span>
@@ -107,11 +117,14 @@ const getPostList = async () => {
                 :href="'https://search.kyobobook.co.kr/search?keyword=' + isbn"
                 target="_blank"
                 class="text-blue-600 underline hover:text-blue-800"
-                >책 구매 페이지로 이동</a
               >
+                책 구매 페이지로 이동
+              </a>
             </div>
           </div>
+
           <hr />
+
           <div class="mt-6 bg-[#fff9e7] p-4 rounded-lg shadow-inner">
             <h2 class="text-lg font-semibold text-[#8d6e00] mb-2">책 소개</h2>
             <p class="text-sm text-gray-800 leading-relaxed">

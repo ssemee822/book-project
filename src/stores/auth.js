@@ -45,8 +45,6 @@ export const useAuthStore = defineStore("auth", {
         localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("isLogin", true);
         localStorage.setItem("nickname", nickname);
-
-        alert("로그인 성공!");
       } catch (err) {
         this.error =
           err.response?.data?.message ||

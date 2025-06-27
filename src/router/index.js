@@ -9,7 +9,7 @@ import PostDetail from "../pages/PostDetail.vue";
 import LoginPage from "../pages/LoginPage.vue";
 import SignupPage from "../pages/SignupPage.vue";
 import PostCreate from "../pages/PostCreate.vue";
-import Bestseller from "../pages/Bestseller.vue";
+import Bestseller from "../pages/Home.vue";
 import Search from "../pages/Search.vue";
 
 const routes = [

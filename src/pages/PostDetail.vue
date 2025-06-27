@@ -77,7 +77,7 @@ function formatKoreanDateTime(isoString) {
 <template>
   <div class="flex">
     <div class="max-w-3xl mx-auto flex-1 mt-8">
-      <div v-if="isMe" class="relative flex justify-end">
+      <div v-if="isMe" class="relative flex justify-end mr-4">
         <button
           @click="showMenu = !showMenu"
           class="text-2xl text-gray-600 hover:text-black px-2"
@@ -101,7 +101,9 @@ function formatKoreanDateTime(isoString) {
         </div>
       </div>
       <div class="flex flex-col items-center">
-        <h1 class="text-2xl font-bold mb-2 mt-4">{{ post.title }}</h1>
+        <h1 class="text-2xl font-bold mb-2 mt-4 p-4 sm:p-0">
+          {{ post.title }}
+        </h1>
         <div class="text-sm text-gray-500 mb-1">{{ post.username }}</div>
         <div class="text-sm text-gray-500 mb-1">
           {{ formatKoreanDateTime(post.createdAt) }}
@@ -131,7 +133,7 @@ function formatKoreanDateTime(isoString) {
           {{ post.content }}
         </div>
 
-        <div class="w-full mt-12 px-6">
+        <div class="w-full mt-12 px-6 mb-4">
           <h2 class="text-lg font-semibold mb-4">💬 댓글</h2>
           <Comment :boardId="boardId"></Comment>
         </div>

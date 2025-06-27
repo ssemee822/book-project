@@ -1,5 +1,5 @@
 <script setup>
-import BookList from "../components/book/BookList.vue";
+import BookList from "../components/search/BookList.vue";
 import SearchBar from "../components/common/SearchBar.vue";
 import BaseButton from "../components/common/BaseButton.vue";
 import { ref, onMounted } from "vue";
