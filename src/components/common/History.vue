@@ -46,11 +46,11 @@ const goPostDetail = async (isbn) => {
       <div class="text-sm text-gray-500 mb-2">
         읽은 책: {{ bookList ? bookList.length : "" }}권
       </div>
-      <div class="grid grid-cols-3 gap-4 max-h-[450px] overflow-y-auto">
+      <div class="grid grid-cols-3 gap-4 h-[80vh] overflow-y-auto">
         <div
           v-for="book in bookList"
           :key="book.historyId"
-          class="relative group cursor-pointer"
+          class="relative group cursor-pointer h-[131px]"
           @click="goPostDetail(book.isbn)"
         >
           <img

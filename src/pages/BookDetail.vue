@@ -144,7 +144,9 @@ const getPostList = async () => {
           <div class="text-sm text-gray-500">평균 별점</div>
         </div>
         <div class="bg-white p-6 rounded-xl shadow">
-          <h2 class="text-lg font-semibold mb-4 text-gray-800">항목별 별점</h2>
+          <h2 class="text-lg font-semibold mb-4 text-gray-800">
+            다른 회원들의 평가
+          </h2>
           <ul>
             <li
               v-for="(rate, index) in rateList"
