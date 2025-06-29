@@ -58,6 +58,13 @@ const postComment = async () => {
   window.location.reload();
 };
 
+const handleLike = async (commentId, type) => {
+  const res = await axios.post(
+    `/api/board/${props.boardId}/comment/${commentId}/${type}`
+  );
+  getCommentList();
+};
+
 function formatKoreanDateTime(isoString) {
   const date = new Date(isoString);
   const pad = (n) => String(n).padStart(2, "0");
@@ -135,6 +142,30 @@ function formatKoreanDateTime(isoString) {
       </div>
       <div class="text-xs text-gray-400 mb-1">
         {{ formatKoreanDateTime(comment.createdAt) }}
+      </div>
+      <div class="text-xs text-gray-400 text-right mt-2 sm:mt-0">
+        <button
+          @click="handleLike(comment.boardCid, 'LIKE')"
+          class="transition disabled:opacity-40 mr-2"
+          :class="
+            comment.reaction == 'LIKE'
+              ? 'text-red-500 hover:text-red-600 '
+              : 'text-black-500 hover:text-black-600 '
+          "
+        >
+          좋아요 {{ comment.likeCount }}
+        </button>
+        <button
+          @click="handleLike(comment.boardCid, 'DISLIKE')"
+          class="transition disabled:opacity-40"
+          :class="
+            comment.reaction == 'DISLIKE'
+              ? 'text-blue-500 hover:text-blue-600 '
+              : 'text-black-500 hover:text-black-600 '
+          "
+        >
+          싫어요 {{ comment.hateCount }}
+        </button>
       </div>
     </li>
   </ul>

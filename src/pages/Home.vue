@@ -41,11 +41,7 @@ const handleSearch = () => {
           검색
         </BaseButton>
       </div>
-
-      <!-- 인기글, 베스트셀러 -->
-      <h2 class="text-lg sm:text-xl font-bold mb-4">🔥 인기글</h2>
       <WeeklyPopularPosts class="mb-10" />
-      <h2 class="text-lg sm:text-xl font-bold mb-4">📅 베스트셀러</h2>
       <BestsellerList />
     </div>
   </div>
