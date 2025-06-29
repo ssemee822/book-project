@@ -6,6 +6,7 @@ import { searchBooks } from "../../api/kakao.js";
 
 const router = useRouter();
 const bookList = ref();
+const isLoading = ref(true);
 
 onMounted(() => {
   getTodoList();
@@ -14,9 +15,14 @@ onMounted(() => {
 const getTodoList = async () => {
   const res = await axios.get(`/api/user/me/books`);
   bookList.value = res.data.data;
-  for (const book of bookList.value) {
-    book.thumbnail = await getImage(book.isbn);
-  }
+  const thumbnailPromises = bookList.value.map((book) =>
+    getImage(book.isbn).then((thumbnail) => {
+      book.thumbnail = thumbnail;
+    })
+  );
+
+  await Promise.all(thumbnailPromises);
+  isLoading.value = false;
 };
 
 const getImage = async (isbn) => {
@@ -40,37 +46,53 @@ const goPostDetail = async (isbn) => {
 
 <template>
   <div>
-    <div class="p-1 sm:p-4">
-      <h2 class="text-lg font-bold mb-4">📚 내 서재</h2>
-      <hr class="border-gray-300 my-4" />
-      <div class="text-sm text-gray-500 mb-2">
-        읽은 책: {{ bookList ? bookList.length : "" }}권
-      </div>
-      <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 overflow-y-auto">
-        <div
-          v-for="book in bookList"
-          :key="book.historyId"
-          class="relative group cursor-pointer"
-          @click="goPostDetail(book.isbn)"
-        >
-          <img
-            :src="book.thumbnail"
-            class="object-cover rounded shadow transition duration-200"
-          />
-
+    <transition name="fade-slide" mode="out-in">
+      <div :key="isLoading" class="p-1 sm:p-4" v-if="!isLoading">
+        <h2 class="text-lg font-bold mb-4">📚 내 서재</h2>
+        <hr class="border-gray-300 my-4" />
+        <div class="text-sm text-gray-500 mb-2">
+          읽은 책: {{ bookList ? bookList.length : "" }}권
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 overflow-y-auto">
           <div
-            class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-60 rounded flex items-center justify-center transition duration-200"
+            v-for="book in bookList"
+            :key="book.historyId"
+            class="relative group cursor-pointer"
+            @click="goPostDetail(book.isbn)"
           >
-            <p
-              class="text-white text-xs font-semibold opacity-0 group-hover:opacity-100 transition duration-200 text-center px-2"
+            <img
+              :src="book.thumbnail"
+              class="object-cover rounded shadow transition duration-200"
+            />
+
+            <div
+              class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-60 rounded flex items-center justify-center transition duration-200"
             >
-              {{ book.memo }}
-            </p>
+              <p
+                class="text-white text-xs font-semibold opacity-0 group-hover:opacity-100 transition duration-200 text-center px-2"
+              >
+                {{ book.memo }}
+              </p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- <img src="../../../public/ho.png" class="mt-10" /> -->
-    </div>
+        <!-- <img src="../../../public/ho.png" class="mt-10" /> -->
+      </div>
+    </transition>
   </div>
 </template>
+<style scoped>
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all 0.3s ease;
+}
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+</style>
