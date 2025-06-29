@@ -184,7 +184,7 @@ const getPostList = async () => {
                     >★</span
                   >
                 </span>
-                <span class="text-sm text-gray-500">{{ rate }}건</span>
+                <span class="text-sm text-gray-500 w-10">{{ rate }}건</span>
               </div>
             </li>
           </ul>
