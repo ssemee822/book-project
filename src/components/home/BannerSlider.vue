@@ -34,7 +34,7 @@ const banners = [
     class="!w-full !max-w-full rounded-xl overflow-hidden h-48 sm:h-72"
     :slides-per-view="1"
     :loop="true"
-    :autoplay="{ delay: 4000 }"
+    :autoplay="{ delay: 3000 }"
     :modules="[Autoplay]"
   >
     <swiper-slide

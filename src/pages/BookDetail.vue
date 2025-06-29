@@ -48,13 +48,13 @@ const getPostList = async () => {
 
 <template>
   <div class="flex min-h-screen bg-[#fefdfb]">
-    <div class="flex-1 p-10">
-      <div class="flex flex-col md:flex-row gap-6" v-if="book != null">
+    <div class="flex-1 p-10" v-if="book != null" data-aos="fade-up">
+      <div class="flex flex-col md:flex-row gap-6">
         <div
           class="w-full md:w-64 bg-white rounded-xl shadow flex items-center justify-center"
         >
           <img
-            :src="getHighQualityThumbnail(book.thumbnail)"
+            :src="getHighQualityThumbnail(book?.thumbnail)"
             alt="book cover"
             class="max-w-[85%] max-h-[90%] object-contain rounded"
           />
@@ -62,7 +62,7 @@ const getPostList = async () => {
 
         <div class="flex-1 space-y-4">
           <h1 class="text-2xl md:text-3xl font-bold text-gray-900">
-            {{ book.title }}
+            {{ book?.title }}
           </h1>
 
           <div
@@ -128,10 +128,7 @@ const getPostList = async () => {
 
           <hr />
 
-          <div
-            class="mt-6 bg-[#fff9e7] p-4 rounded-lg shadow-inner"
-            data-aos="fade-in"
-          >
+          <div class="mt-6 bg-[#fff9e7] p-4 rounded-lg shadow-inner">
             <h2 class="text-lg font-semibold text-[#8d6e00] mb-2">책 소개</h2>
             <p class="text-sm text-gray-800 leading-relaxed">
               {{ book.contents }}...
@@ -139,11 +136,7 @@ const getPostList = async () => {
           </div>
         </div>
       </div>
-
-      <div
-        class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10"
-        data-aos="fade-up"
-      >
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
         <div
           class="bg-white p-6 rounded-xl shadow flex flex-col items-center text-center justify-center"
         >
@@ -161,7 +154,7 @@ const getPostList = async () => {
             </span>
           </div>
           <div class="text-3xl font-bold mt-2 text-gray-800">
-            {{ avgRate }}
+            {{ avgRate?.toFixed(1) }}
           </div>
           <div class="text-sm text-gray-500">평균 별점</div>
         </div>
@@ -197,7 +190,6 @@ const getPostList = async () => {
           </ul>
         </div>
       </div>
-
       <div class="gap-6 mt-6">
         <div class="bg-white p-6 rounded shadow-md">
           <div class="grid grid-cols-2 border-b pb-4 mb-6">
