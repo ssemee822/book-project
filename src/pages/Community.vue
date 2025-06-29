@@ -1,51 +1,84 @@
 <script setup>
-import SearchBar from "../components/common/SearchBar.vue";
 import BaseButton from "../components/common/BaseButton.vue";
 import PostCard from "../components/community/PostCard.vue";
 import axios from "../api/axios";
-import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { ref, onMounted, computed } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { searchBooks } from "../api/kakao.js";
+import { watch } from "vue";
 
 const query = ref("");
 const posts = ref([]);
-const currentPage = ref(1);
 const totalPages = ref(1);
 const totalCount = ref(0);
-const pageSize = 5;
+const pageSize = 10;
+const isLoading = ref(true);
+const route = useRoute();
 const router = useRouter();
+const currentPage = computed(() => {
+  const pageParam = parseInt(route.query.page);
+  return isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
+});
+
+watch(currentPage, () => {
+  getCommunityList();
+});
 
 onMounted(() => {
   getCommunityList();
 });
 
+const currentGroupStart = computed(() => {
+  return Math.floor((currentPage.value - 1) / pageSize) * pageSize + 1;
+});
+
+const pageGroup = computed(() => {
+  return Array.from(
+    { length: pageSize },
+    (_, i) => currentGroupStart.value + i
+  ).filter((page) => page <= totalPages.value);
+});
+
 const getCommunityList = async () => {
-  const res = await axios.get("/api/board/list");
-  const rawPosts = res.data.data.content;
+  isLoading.value = true;
+  try {
+    const res = await axios.get("/api/board/list", {
+      params: {
+        page: currentPage.value - 1,
+        size: pageSize,
+      },
+    });
 
-  const thumbnailPromises = rawPosts.map((post) => getImage(post.isbn));
-  const thumbnails = await Promise.all(thumbnailPromises);
+    const rawPosts = res.data.data.content;
+    const thumbnails = await Promise.all(
+      rawPosts.map((post) => getImage(post.isbn))
+    );
 
-  rawPosts.forEach((post, index) => {
-    post.thumbnail = thumbnails[index];
-  });
+    rawPosts.forEach((post, index) => {
+      post.thumbnail = thumbnails[index];
+    });
 
-  posts.value = rawPosts;
-  totalCount.value = rawPosts.length;
-  totalPages.value = Math.ceil(rawPosts.length / pageSize);
+    posts.value = rawPosts;
+    totalCount.value = res.data.data.totalElements;
+    totalPages.value = res.data.data.totalPages;
+  } catch (e) {
+    console.error(e);
+  } finally {
+    isLoading.value = false;
+  }
 };
 
 const changePage = (page) => {
+  posts.value = [];
   if (page >= 1 && page <= totalPages.value) {
-    currentPage.value = page;
+    router.push({ query: { ...route.query, page } });
   }
 };
 
 const getImage = async (isbn) => {
   const result = await searchBooks(isbn, 1, "isbn");
   if (result.meta.total_count > 0) {
-    const thumbnailUrl = result.documents[0].thumbnail;
-    return thumbnailUrl;
+    return result.documents[0].thumbnail;
   } else {
     return "https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F5291060%3Ftimestamp%3D20250623135402";
   }
@@ -71,30 +104,82 @@ const goPostCreate = () => {
         </BaseButton>
       </div>
 
-      <div class="space-y-3">
-        <PostCard
-          v-for="post in posts.slice(
-            (currentPage - 1) * pageSize,
-            currentPage * pageSize
-          )"
-          :key="post.id"
-          :post="post"
-        />
+      <div v-if="isLoading" class="flex justify-center py-10">
+        <svg
+          class="animate-spin h-8 w-8 text-[#9baa59]"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          />
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8v8z"
+          />
+        </svg>
       </div>
 
-      <div class="mt-6 flex justify-center gap-2">
+      <transition name="fade-slide" mode="out-in">
+        <div :key="currentPage" class="space-y-3">
+          <div v-for="post in posts" :key="post.id">
+            <PostCard :post="post" />
+          </div>
+        </div>
+      </transition>
+      <div
+        class="mt-6 flex justify-center gap-2"
+        v-if="!isLoading && totalPages > 1"
+      >
         <BaseButton
-          @click="changePage(currentPage - 1)"
-          :disabled="currentPage === 1"
-          >이전</BaseButton
+          @click="changePage(currentGroupStart - 1)"
+          :disabled="currentGroupStart === 1"
         >
-        <span class="px-4 py-2">{{ currentPage }} / {{ totalPages }}</span>
+          이전
+        </BaseButton>
+
+        <button
+          v-for="page in pageGroup"
+          :key="page"
+          @click="changePage(page)"
+          class="px-3 py-1 border rounded"
+          :class="{
+            'bg-[#9baa59] text-white': page === currentPage,
+            'hover:bg-gray-100': page !== currentPage,
+          }"
+        >
+          {{ page }}
+        </button>
+
         <BaseButton
-          @click="changePage(currentPage + 1)"
-          :disabled="currentPage === totalPages"
-          >다음</BaseButton
+          @click="changePage(currentGroupStart + pageSize)"
+          :disabled="currentGroupStart + pageSize > totalPages"
         >
+          다음
+        </BaseButton>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all 0.3s ease;
+}
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+</style>

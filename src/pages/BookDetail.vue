@@ -13,8 +13,11 @@ const book = ref(null);
 const posts = ref([]);
 const avgRate = ref();
 const rateList = ref([]);
+const transitionName = ref("slide-left");
 
 const selectTab = (tab) => {
+  if (tab === selectedTab.value) return;
+  transitionName.value = tab === "comment" ? "slide-right" : "slide-left";
   selectedTab.value = tab;
 };
 
@@ -26,7 +29,7 @@ onMounted(async () => {
 });
 
 const getRating = async () => {
-  const res = await axios.get(`/api/v1/books/${isbn}/rating`);
+  const res = await axios.get(`/api/book/${isbn}/rating`);
   avgRate.value = res.data.data.averageScore;
   rateList.value = res.data.data.scoreCounts;
 };
@@ -125,7 +128,10 @@ const getPostList = async () => {
 
           <hr />
 
-          <div class="mt-6 bg-[#fff9e7] p-4 rounded-lg shadow-inner">
+          <div
+            class="mt-6 bg-[#fff9e7] p-4 rounded-lg shadow-inner"
+            data-aos="fade-in"
+          >
             <h2 class="text-lg font-semibold text-[#8d6e00] mb-2">책 소개</h2>
             <p class="text-sm text-gray-800 leading-relaxed">
               {{ book.contents }}...
@@ -134,7 +140,10 @@ const getPostList = async () => {
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10"
+        data-aos="fade-up"
+      >
         <div
           class="bg-white p-6 rounded-xl shadow flex flex-col items-center text-center justify-center"
         >
@@ -214,18 +223,49 @@ const getPostList = async () => {
             </h2>
           </div>
           <div>
-            <Comment v-if="selectedTab === 'comment'" :isbn="isbn" />
-            <div v-if="selectedTab === 'blog'" class="space-y-4">
-              <PostCard
-                v-for="post in posts"
-                :key="post.boardId"
-                :post="post"
-                type="book"
-              />
-            </div>
+            <transition :name="transitionName" mode="out-in">
+              <div :key="selectedTab">
+                <Comment v-if="selectedTab === 'comment'" :isbn="isbn" />
+                <div v-else class="space-y-4">
+                  <PostCard
+                    v-for="post in posts"
+                    :key="post.boardId"
+                    :post="post"
+                    type="book"
+                  />
+                </div>
+              </div>
+            </transition>
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.slide-left-enter-active,
+.slide-left-leave-active,
+.slide-right-enter-active,
+.slide-right-leave-active {
+  transition: all 0.2s ease;
+}
+
+.slide-left-enter-from {
+  transform: translateX(100%);
+  opacity: 0;
+}
+.slide-left-leave-to {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.slide-right-enter-from {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+.slide-right-leave-to {
+  transform: translateX(100%);
+  opacity: 0;
+}
+</style>

@@ -155,124 +155,126 @@ const toggleForm = () => {
 </script>
 
 <template>
-  <div class="flex min-h-screen bg-gray-50">
-    <div class="flex-1 gap-6 p-6">
-      <div class="col-span-2 space-y-6">
-        <div class="bg-white rounded-xl shadow p-4">
-          <FullCalendar :options="calendarOptions" class="custom-calendar" />
-          <div class="mt-4 flex justify-end">
-            <div class="relative inline-block">
-              <BaseButton @click="toggleForm" class="text-sm"
-                >+ 일정 추가</BaseButton
-              >
-              <transition name="fade">
-                <div
-                  v-if="showForm"
-                  class="absolute bottom-full mb-2 right-0 z-50 bg-white p-4 rounded-lg shadow-lg w-[330px]"
+  <div>
+    <div class="flex min-h-screen bg-gray-50">
+      <div class="flex-1 gap-6 p-6">
+        <div class="col-span-2 space-y-6">
+          <div class="bg-white rounded-xl shadow p-4">
+            <FullCalendar :options="calendarOptions" class="custom-calendar" />
+            <div class="mt-4 flex justify-end">
+              <div class="relative inline-block">
+                <BaseButton @click="toggleForm" class="text-sm"
+                  >+ 일정 추가</BaseButton
                 >
-                  <BookSearch @select="handleBookSelect" />
-                  <div class="mt-4">
-                    <label class="text-xs text-gray-500">📅 읽기 시작</label>
-                    <input
-                      v-model="newTodo.start"
-                      type="date"
-                      class="w-full border px-2 py-1 rounded text-sm mt-1"
-                    />
+                <transition name="fade">
+                  <div
+                    v-if="showForm"
+                    class="absolute bottom-full mb-2 right-0 z-50 bg-white p-4 rounded-lg shadow-lg w-[330px]"
+                  >
+                    <BookSearch @select="handleBookSelect" />
+                    <div class="mt-4">
+                      <label class="text-xs text-gray-500">📅 읽기 시작</label>
+                      <input
+                        v-model="newTodo.start"
+                        type="date"
+                        class="w-full border px-2 py-1 rounded text-sm mt-1"
+                      />
+                    </div>
+                    <div class="mt-4">
+                      <label class="text-xs text-gray-500">📅 읽기 완료</label>
+                      <input
+                        v-model="newTodo.end"
+                        type="date"
+                        class="w-full border px-2 py-1 rounded text-sm mt-1"
+                      />
+                    </div>
+                    <div class="flex justify-end gap-2 mt-4">
+                      <button
+                        @click="showForm = false"
+                        class="text-xs text-gray-500 hover:text-black mr-4"
+                      >
+                        취소
+                      </button>
+                      <BaseButton @click="addTodo" class="text-sm"
+                        >등록</BaseButton
+                      >
+                    </div>
                   </div>
-                  <div class="mt-4">
-                    <label class="text-xs text-gray-500">📅 읽기 완료</label>
-                    <input
-                      v-model="newTodo.end"
-                      type="date"
-                      class="w-full border px-2 py-1 rounded text-sm mt-1"
-                    />
-                  </div>
-                  <div class="flex justify-end gap-2 mt-4">
-                    <button
-                      @click="showForm = false"
-                      class="text-xs text-gray-500 hover:text-black mr-4"
-                    >
-                      취소
-                    </button>
-                    <BaseButton @click="addTodo" class="text-sm"
-                      >등록</BaseButton
-                    >
-                  </div>
-                </div>
-              </transition>
+                </transition>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="bg-white rounded-xl shadow p-4 max-h-80 overflow-y-auto">
-          <!-- <h2 class="text-lg font-semibold mb-4">🗓 책 리스트</h2> -->
-          <ul class="space-y-2">
-            <li
-              v-for="(todo, index) in todoList"
-              :key="index"
-              class="flex items-start gap-3 p-3 bg-white rounded-md shadow-sm border border-gray-200 hover:shadow-md transition"
-            >
-              <input
-                type="checkbox"
-                :checked="todo.status === 'COMPLETED'"
-                @change="updateEvent(todo)"
-                class="mt-1 w-5 h-5 accent-yellow-400 cursor-pointer"
-              />
-              <div class="flex flex-col">
-                <span
-                  :class="[
-                    'text-sm',
-                    todo.status === 'COMPLETED'
-                      ? 'line-through text-gray-400'
-                      : 'text-gray-800 font-medium',
-                  ]"
-                >
-                  {{ todo.memo }}
-                </span>
-                <span class="text-xs text-gray-400 mt-0.5">
-                  📅 {{ formatPeriod(todo.startRead, todo.endRead) }}
-                </span>
-              </div>
-            </li>
-          </ul>
+          <div class="bg-white rounded-xl shadow p-4 max-h-80 overflow-y-auto">
+            <!-- <h2 class="text-lg font-semibold mb-4">🗓 책 리스트</h2> -->
+            <ul class="space-y-2">
+              <li
+                v-for="(todo, index) in todoList"
+                :key="index"
+                class="flex items-start gap-3 p-3 bg-white rounded-md shadow-sm border border-gray-200 hover:shadow-md transition"
+              >
+                <input
+                  type="checkbox"
+                  :checked="todo.status === 'COMPLETED'"
+                  @change="updateEvent(todo)"
+                  class="mt-1 w-5 h-5 accent-yellow-400 cursor-pointer"
+                />
+                <div class="flex flex-col">
+                  <span
+                    :class="[
+                      'text-sm',
+                      todo.status === 'COMPLETED'
+                        ? 'line-through text-gray-400'
+                        : 'text-gray-800 font-medium',
+                    ]"
+                  >
+                    {{ todo.memo }}
+                  </span>
+                  <span class="text-xs text-gray-400 mt-0.5">
+                    📅 {{ formatPeriod(todo.startRead, todo.endRead) }}
+                  </span>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div
-    v-if="isEditModalOpen"
-    class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
-  >
-    <div class="bg-white p-6 rounded-lg w-[500px] shadow-lg">
-      <h2 class="text-lg font-bold mb-4">{{ editedMemo }}</h2>
-      <div class="mb-2">
-        <label class="text-xs text-gray-500">📅 읽기 시작</label>
-        <input
-          v-model="editedStart"
-          type="date"
-          class="w-full border px-2 py-1 rounded text-sm mt-1"
-        />
-      </div>
-      <div class="mb-4">
-        <label class="text-xs text-gray-500">📅 읽기 완료</label>
-        <input
-          v-model="editedEnd"
-          type="date"
-          class="w-full border px-2 py-1 rounded text-sm mt-1"
-        />
-      </div>
-      <div class="flex justify-end gap-2">
-        <button
-          @click="updateMemo"
-          class="bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-1 rounded"
-        >
-          저장
-        </button>
-        <button
-          @click="isEditModalOpen = false"
-          class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-1 rounded"
-        >
-          닫기
-        </button>
+    <div
+      v-if="isEditModalOpen"
+      class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
+    >
+      <div class="bg-white p-6 rounded-lg w-[500px] shadow-lg">
+        <h2 class="text-lg font-bold mb-4">{{ editedMemo }}</h2>
+        <div class="mb-2">
+          <label class="text-xs text-gray-500">📅 읽기 시작</label>
+          <input
+            v-model="editedStart"
+            type="date"
+            class="w-full border px-2 py-1 rounded text-sm mt-1"
+          />
+        </div>
+        <div class="mb-4">
+          <label class="text-xs text-gray-500">📅 읽기 완료</label>
+          <input
+            v-model="editedEnd"
+            type="date"
+            class="w-full border px-2 py-1 rounded text-sm mt-1"
+          />
+        </div>
+        <div class="flex justify-end gap-2">
+          <button
+            @click="updateMemo"
+            class="bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-1 rounded"
+          >
+            저장
+          </button>
+          <button
+            @click="isEditModalOpen = false"
+            class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-1 rounded"
+          >
+            닫기
+          </button>
+        </div>
       </div>
     </div>
   </div>

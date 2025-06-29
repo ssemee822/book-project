@@ -61,8 +61,8 @@ const getHighQualityThumbnail = (url) => {
         <div class="text-sm text-gray-500">
           <span class="mr-2">
             {{
-              post.content.length > (isMobile ? 80 : 130)
-                ? post.content.slice(0, isMobile ? 80 : 130) + "..."
+              post.content.length > 130
+                ? post.content.slice(0, 130) + "..."
                 : post.content
             }}
           </span>
