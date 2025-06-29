@@ -20,8 +20,8 @@ onMounted(async () => {
   getPost();
 });
 
-const getPost = async () => {
-  isLoading.value = true;
+const getPost = async (loading = true) => {
+  if (loading) isLoading.value = true;
   try {
     const res = await axios.get("/api/board/" + boardId);
     post.value = res.data.data;
@@ -59,7 +59,7 @@ const getHighQualityThumbnail = (url) => {
 
 const handleLike = async () => {
   const res = await axios.post(`/api/board/like/${boardId}`);
-  getPost();
+  getPost(false);
 };
 
 const handleDelete = async () => {

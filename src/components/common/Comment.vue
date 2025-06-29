@@ -143,7 +143,10 @@ function formatKoreanDateTime(isoString) {
       <div class="text-xs text-gray-400 mb-1">
         {{ formatKoreanDateTime(comment.createdAt) }}
       </div>
-      <div class="text-xs text-gray-400 text-right mt-2 sm:mt-0">
+      <div
+        v-if="!props.isbn"
+        class="text-xs text-gray-400 text-right mt-2 sm:mt-0"
+      >
         <button
           @click="handleLike(comment.boardCid, 'LIKE')"
           class="transition disabled:opacity-40 mr-2"
