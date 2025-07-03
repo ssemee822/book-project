@@ -124,7 +124,9 @@ const uploadTodo = async () => {
     endRead: newTodo.value.end,
     isbn: newTodo.value.isbn,
     status: "READING",
+    title: newTodo.value.title,
   };
+  console.log(body);
   const res = await axios.post(`/api/user/me/books`, body);
   getTodoList();
   window.location.reload();

@@ -53,7 +53,9 @@ const goPostDetail = async (isbn) => {
         <div class="text-sm text-gray-500 mb-2">
           읽은 책: {{ bookList ? bookList.length : "" }}권
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 overflow-y-auto">
+        <div
+          class="grid grid-cols-2 sm:grid-cols-3 gap-4 overflow-y-auto max-h-[80vh]"
+        >
           <div
             v-for="book in bookList"
             :key="book.historyId"
