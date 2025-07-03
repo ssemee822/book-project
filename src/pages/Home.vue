@@ -24,8 +24,6 @@ const handleSearch = () => {
       <div class="w-full max-w-screen-lg">
         <BannerSlider />
       </div>
-
-      <!-- 검색창 -->
       <div
         class="p-2 sm:p-4 border-b mb-4 flex flex-col sm:flex-row gap-2 items-stretch sm:items-center"
       >

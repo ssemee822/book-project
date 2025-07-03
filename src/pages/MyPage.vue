@@ -17,6 +17,7 @@ const editedStart = ref("");
 const editedEnd = ref("");
 const selectedEvent = ref("");
 const isEditModalOpen = ref("");
+const calendarRef = ref(null);
 
 watch(selectedEvent, (event) => {
   if (event) {
@@ -39,11 +40,17 @@ const updateMemo = async () => {
 };
 
 onMounted(() => {
-  getTodoList();
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1;
+  getTodoList(year, month);
 });
 
-const getTodoList = async () => {
-  const res = await axios.get(`/api/user/me/books`);
+const getTodoList = async (year, month) => {
+  const res = await axios.get(
+    `/api/user/calendar/histories?year=${year}&month=${month}`
+  );
+
   todoList.value = res.data.data;
 };
 
@@ -59,9 +66,9 @@ const calendarOptions = ref({
   locales: [koLocale],
   height: 500,
   headerToolbar: {
-    left: "prev,next",
+    left: "myPrev,myNext",
     center: "title",
-    right: "today",
+    right: "myToday",
   },
   events: [],
   eventDidMount(info) {
@@ -75,6 +82,41 @@ const calendarOptions = ref({
   eventClick(info) {
     selectedEvent.value = info.event;
     isEditModalOpen.value = true;
+  },
+  customButtons: {
+    myPrev: {
+      text: "Prev",
+      click() {
+        const calendarApi = calendarRef.value.getApi();
+        calendarApi.prev();
+        const date = calendarApi.currentData.calendarApi.currentData.viewTitle;
+        const year = date.split("년");
+        const month = year[1].split("월")[0].trim();
+        getTodoList(year[0], month);
+      },
+    },
+    myNext: {
+      text: "Next",
+      click() {
+        const calendarApi = calendarRef.value.getApi();
+        calendarApi.next();
+        const date = calendarApi.currentData.calendarApi.currentData.viewTitle;
+        const year = date.split("년");
+        const month = year[1].split("월")[0].trim();
+        getTodoList(year[0], month);
+      },
+    },
+    myToday: {
+      text: "Today",
+      click() {
+        const calendarApi = calendarRef.value.getApi();
+        calendarApi.today();
+        const date = calendarApi.currentData.calendarApi.currentData.viewTitle;
+        const year = date.split("년");
+        const month = year[1].split("월")[0].trim();
+        getTodoList(year[0], month);
+      },
+    },
   },
 });
 
@@ -126,7 +168,6 @@ const uploadTodo = async () => {
     status: "READING",
     title: newTodo.value.title,
   };
-  console.log(body);
   const res = await axios.post(`/api/user/me/books`, body);
   getTodoList();
   window.location.reload();
@@ -135,6 +176,7 @@ const uploadTodo = async () => {
 function formatPeriod(start, end) {
   return start === end ? start : `${start} ~ ${end}`;
 }
+
 const updateEvent = async (todo) => {
   if (todo.status == "COMPLETED") {
     const body = {
@@ -162,7 +204,11 @@ const toggleForm = () => {
       <div class="flex-1 gap-6 p-6">
         <div class="col-span-2 space-y-6">
           <div class="bg-white rounded-xl shadow p-4">
-            <FullCalendar :options="calendarOptions" class="custom-calendar" />
+            <FullCalendar
+              :options="calendarOptions"
+              class="custom-calendar"
+              ref="calendarRef"
+            />
             <div class="mt-4 flex justify-end">
               <div class="relative inline-block">
                 <BaseButton @click="toggleForm" class="text-sm"
