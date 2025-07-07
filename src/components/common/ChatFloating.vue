@@ -45,6 +45,7 @@ const connectSocket = () => {
           text: body.content,
           isMine: body.sender === myEmail,
           sender: body.sender,
+          nickname: body.nickname,
           timestamp: body.timestamp,
         });
       });
@@ -60,6 +61,7 @@ const connectSocket = () => {
           sender: m.sender,
           isMine: m.sender === myEmail,
           timestamp: m.timestamp,
+          nickname: m.nickname,
         }));
       });
 
@@ -140,7 +142,7 @@ const formatTime = (ts) => {
             "
             class="text-xs text-gray-500 mb-1"
           >
-            {{ msg.sender }}
+            {{ msg.nickname }}
           </div>
 
           <div
