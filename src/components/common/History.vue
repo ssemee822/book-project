@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import axios from "../../api/axios.js";
 import { searchBooks } from "../../api/kakao.js";
+import ChatFloating from "./ChatFloating.vue";
 
 const router = useRouter();
 const bookList = ref();
@@ -49,12 +50,11 @@ const goPostDetail = async (isbn) => {
     <transition name="fade-slide" mode="out-in">
       <div :key="isLoading" class="p-1 sm:p-4" v-if="!isLoading">
         <h2 class="text-lg font-bold mb-4">📚 내 서재</h2>
-        <hr class="border-gray-300 my-4" />
         <div class="text-sm text-gray-500 mb-2">
           읽은 책: {{ bookList ? bookList.length : "" }}권
         </div>
         <div
-          class="grid grid-cols-2 sm:grid-cols-3 gap-4 overflow-y-auto max-h-[80vh]"
+          class="grid grid-cols-2 sm:grid-cols-3 gap-4 overflow-y-auto max-h-[75vh]"
         >
           <div
             v-for="book in bookList"
@@ -78,10 +78,11 @@ const goPostDetail = async (isbn) => {
             </div>
           </div>
         </div>
-
         <!-- <img src="../../../public/ho.png" class="mt-10" /> -->
       </div>
     </transition>
+    <!-- 채팅 -->
+    <ChatFloating />
   </div>
 </template>
 <style scoped>

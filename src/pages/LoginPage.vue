@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import BaseButton from "../components/common/BaseButton.vue";
 import { useAuthStore } from "../stores/auth";
 
 const email = ref("");

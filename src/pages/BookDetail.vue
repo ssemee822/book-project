@@ -1,10 +1,10 @@
 <script setup>
 import Comment from "../components/common/Comment.vue";
 import PostCard from "../components/community/PostCard.vue";
+import axios from "../api/axios";
+import { searchBooks } from "../api/kakao.js";
 import { useRoute } from "vue-router";
 import { onMounted, ref } from "vue";
-import { searchBooks } from "../api/kakao.js";
-import axios from "../api/axios";
 
 const selectedTab = ref("comment");
 const route = useRoute();

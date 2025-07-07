@@ -1,14 +1,14 @@
 <script setup>
-import BaseButton from "../components/common/BaseButton.vue";
-import BookSearch from "../components/common/BookSearch.vue";
 import "@fullcalendar/core/vdom";
+import "@fullcalendar/common/main.css";
+import "@fullcalendar/daygrid/main.css";
 import FullCalendar from "@fullcalendar/vue3";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import koLocale from "@fullcalendar/core/locales/ko";
-import "@fullcalendar/common/main.css";
-import "@fullcalendar/daygrid/main.css";
-import { ref, onMounted, watchEffect, watch } from "vue";
+import BaseButton from "../components/common/BaseButton.vue";
+import BookSearch from "../components/common/BookSearch.vue";
 import axios from "../api/axios";
+import { ref, onMounted, watchEffect, watch } from "vue";
 
 const todoList = ref([]);
 const newTodo = ref({ title: "", start: "", end: "", isbn: "" });
@@ -202,7 +202,7 @@ const toggleForm = () => {
   <div>
     <div class="flex min-h-screen bg-gray-50">
       <div class="flex-1 gap-6 p-6">
-        <div class="col-span-2 space-y-6">
+        <div class="col-span-2 space-y-4">
           <div class="bg-white rounded-xl shadow p-4">
             <FullCalendar
               :options="calendarOptions"
@@ -211,9 +211,9 @@ const toggleForm = () => {
             />
             <div class="mt-4 flex justify-end">
               <div class="relative inline-block">
-                <BaseButton @click="toggleForm" class="text-sm"
-                  >+ 일정 추가</BaseButton
-                >
+                <BaseButton @click="toggleForm" class="text-sm">
+                  + 일정 추가
+                </BaseButton>
                 <transition name="fade">
                   <div
                     v-if="showForm"

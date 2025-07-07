@@ -2,10 +2,9 @@
 import BaseButton from "../components/common/BaseButton.vue";
 import PostCard from "../components/community/PostCard.vue";
 import axios from "../api/axios";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { searchBooks } from "../api/kakao.js";
-import { watch } from "vue";
 
 const query = ref("");
 const posts = ref([]);

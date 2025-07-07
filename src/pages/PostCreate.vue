@@ -1,9 +1,9 @@
 <script setup>
-import { ref } from "vue";
 import BookSearch from "../components/common/BookSearch.vue";
 import BaseButton from "../components/common/BaseButton.vue";
 import axios from "../api/axios";
 import router from "../router";
+import { ref } from "vue";
 
 const title = ref("");
 const content = ref("");

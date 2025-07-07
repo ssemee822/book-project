@@ -3,7 +3,6 @@ import WeeklyPopularPosts from "../components/home/WeeklyPopularPosts.vue";
 import BestsellerList from "../components/home/BestsellerList.vue";
 import SearchBar from "../components/common/SearchBar.vue";
 import BannerSlider from "../components/home/BannerSlider.vue";
-
 import BaseButton from "../components/common/BaseButton.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";

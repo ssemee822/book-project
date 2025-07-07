@@ -1,9 +1,9 @@
 <script setup>
 import Comment from "../components/common/Comment.vue";
-import { useRoute, useRouter } from "vue-router";
-import { onMounted, ref } from "vue";
 import axios from "../api/axios";
 import { searchBooks } from "../api/kakao.js";
+import { useRoute, useRouter } from "vue-router";
+import { onMounted, ref } from "vue";
 
 const route = useRoute();
 const boardId = route.params.boardId;

@@ -9,7 +9,36 @@ const showProfile = ref(false);
 </script>
 
 <template>
-  <div class="flex min-h-screen relative">
+  <div class="flex h-screen overflow-hidden">
+    <div
+      class="hidden sm:block w-1/5 bg-[#f7f5f0] p-4 h-full sticky top-0 overflow-y-auto"
+    >
+      <Sidebar />
+    </div>
+    <div
+      class="fixed top-0 left-0 w-64 bg-[#f7f5f0] p-4 z-40 h-full transform transition-transform sm:hidden"
+      :class="showSidebar ? 'translate-x-0' : '-translate-x-full'"
+    >
+      <Sidebar @close-sidebar="showSidebar = false" />
+    </div>
+    <div class="flex-1 overflow-y-auto h-full bg-[#fafafa] pt-14 sm:pt-0">
+      <router-view v-slot="{ Component }">
+        <transition name="fade" mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
+    </div>
+    <div
+      class="hidden sm:block w-1/4 bg-[#f7f5f0] p-4 h-full sticky top-0 overflow-y-auto"
+    >
+      <ProfileCard />
+    </div>
+    <div
+      class="fixed top-0 right-0 w-64 bg-[#f7f5f0] p-4 z-40 h-full transform transition-transform sm:hidden"
+      :class="showProfile ? 'translate-x-0' : 'translate-x-full'"
+    >
+      <ProfileCard />
+    </div>
     <div
       class="fixed top-0 left-0 w-full h-14 flex items-center justify-between px-4 bg-white shadow z-50 sm:hidden"
     >
@@ -36,28 +65,6 @@ const showProfile = ref(false);
       >
         내 서재
       </button>
-    </div>
-
-    <div
-      class="fixed top-0 left-0 w-64 bg-[#f7f5f0] p-4 z-40 transition-transform h-full transform sm:h-auto sm:relative sm:translate-x-0 sm:w-1/5"
-      :class="showSidebar ? 'translate-x-0' : '-translate-x-full'"
-    >
-      <Sidebar @close-sidebar="showSidebar = false" />
-    </div>
-
-    <div class="flex-1 flex flex-col bg-[#fafafa] pt-14 sm:pt-0">
-      <router-view v-slot="{ Component }">
-        <transition name="fade" mode="out-in">
-          <component :is="Component" />
-        </transition>
-      </router-view>
-    </div>
-
-    <div
-      class="fixed top-0 right-0 w-64 bg-[#f7f5f0] p-4 z-40 transition-transform h-full transform sm:h-auto sm:relative sm:translate-x-0 sm:w-1/4"
-      :class="showProfile ? 'translate-x-0' : 'translate-x-full'"
-    >
-      <ProfileCard />
     </div>
   </div>
 </template>
