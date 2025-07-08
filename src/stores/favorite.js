@@ -1,113 +1,108 @@
-import { createRouter, createWebHistory } from "vue-router";
-import MainLayout from "../layouts/MainLayout.vue";
+import { defineStore } from 'pinia';
+import { favoriteApi } from '../api/favorite';
+import { useAuthStore } from './auth';
 
-import Home from "../pages/Home.vue";
-import BookDetail from "../pages/BookDetail.vue";
-import MyPage from "../pages/MyPage.vue";
-import Community from "../pages/Community.vue";
-import PostDetail from "../pages/PostDetail.vue";
-import LoginPage from "../pages/LoginPage.vue";
-import SignupPage from "../pages/SignupPage.vue";
-import PostCreate from "../pages/PostCreate.vue";
-import Bestseller from "../pages/Home.vue";
-import Search from "../pages/Search.vue";
-import Favorite from "../pages/FavoritePage.vue";
+export const useFavoriteStore = defineStore('favorite', {
+    state: () => ({
+        favoriteIsbns: new Set(),
+        isLoading: false,
+        error: null,
+    }),
+    getters: {
+        isFavorite: (state) => (isbn) => {
+            return state.favoriteIsbns.has(String(isbn));
+        },
+        favoriteCount: (state) => state.favoriteIsbns.size,
+    },
+    actions: {
+        async fetchFavorites() {
+            const authStore = useAuthStore();
+            if (!authStore.isAuthenticated) {
+                this.favoriteIsbns.clear();
+                console.log("[FavoriteStore] Not authenticated, favoriteIsbns cleared.");
+                return;
+            }
 
-const routes = [
-  {
-    path: "/login",
-    name: "LoginPage",
-    component: LoginPage,
-  },
-  {
-    path: "/signup",
-    name: "SignupPage",
-    component: SignupPage,
-  },
-  {
-    path: "/",
-    component: MainLayout,
-    children: [
-      {
-        path: "",
-        name: "Home",
-        component: Bestseller,
-        meta: { requiresAuth: true },
-      },
-      {
-        path: "/book/:isbn",
-        name: "BookDetail",
-        component: BookDetail,
-        meta: { requiresAuth: true },
-      },
-      {
-        path: "/mypage",
-        name: "MyPage",
-        component: MyPage,
-        meta: { requiresAuth: true },
-      },
-      {
-        path: "/community",
-        name: "Community",
-        component: Community,
-        meta: { requiresAuth: true },
-      },
-      {
-        path: "/favorites",
-        name: "Favorites",
-        component: Favorite,
-        meta: { requiresAuth: true },  
-      },
-      {
-        path: "/post/:boardId",
-        name: "PostDetail",
-        component: PostDetail,
-        meta: { requiresAuth: true },
-      },
-      {
-        path: "/postcreate",
-        name: "PostCreate",
-        component: PostCreate,
-        meta: { requiresAuth: true },
-      },
-      {
-        path: "/bestseller",
-        name: "Bestseller",
-        component: Bestseller,
-        meta: { requiresAuth: true },
-      },
-      {
-        path: "/search",
-        name: "Search",
-        component: Search,
-        meta: { requiresAuth: true },
-        
-      },
-    ],
-  },
-];
+            this.isLoading = true;
+            this.error = null;
+            try {
+                const result = await favoriteApi.getFavoriteBooks();
+                if (result.success) {
+                    if (Array.isArray(result.data)) {
+                        this.favoriteIsbns = new Set(result.data.map(book => String(book.isbn)));
+                        console.log(`[FavoriteStore] Fetched ${this.favoriteIsbns.size} favorites.`);
+                    } else {
+                        console.warn("[FavoriteStore] API returned non-array data for favorites:", result.data);
+                        this.favoriteIsbns.clear();
+                    }
+                } else {
+                    this.error = result.message;
+                    this.favoriteIsbns.clear();
+                    console.error("[FavoriteStore] Failed to fetch favorites:", result.message);
+                }
+            } catch (err) {
+                this.error = "즐겨찾기 목록을 불러오는데 실패했습니다.";
+                this.favoriteIsbns.clear();
+                console.error("[FavoriteStore] fetchFavorites action error:", err);
+            } finally {
+                this.isLoading = false;
+            }
+        },
 
-const router = createRouter({
-  history: createWebHistory(),
-  routes,
-  scrollBehavior(to, from, savedPosition) {
-    return { top: 0 };
-  },
+        async toggleFavorite(bookData) {
+            const authStore = useAuthStore();
+            if (!authStore.isAuthenticated) {
+                alert("로그인 후 이용 가능합니다.");
+                return false;
+            }
+
+            this.isLoading = true;
+            this.error = null;
+
+            try {
+                const isbnToToggle = String(bookData.isbn);
+
+                if (this.isFavorite(isbnToToggle)) {
+                    const result = await favoriteApi.removeFavoriteBook(isbnToToggle);
+                    if (result.success) {
+                        this.favoriteIsbns.delete(isbnToToggle);
+                        console.log(`[FavoriteStore] Removed favorite: ${isbnToToggle}`);
+                        return true;
+                    } else {
+                        this.error = result.message;
+                        console.error(`[FavoriteStore] Failed to remove favorite: ${result.message}`);
+                        return false;
+                    }
+                } else {
+                    const dataToSend = {
+                        isbn: isbnToToggle,
+                        title: bookData.title,
+                        author: bookData.authors?.join(', ') || '',
+                        cover: bookData.thumbnail || '',
+                    };
+                    const result = await favoriteApi.addFavoriteBook(dataToSend);
+                    if (result.success) {
+                        this.favoriteIsbns.add(isbnToToggle);
+                        console.log(`[FavoriteStore] Added favorite: ${isbnToToggle}`);
+                        return true;
+                    } else {
+                        this.error = result.message;
+                        console.error(`[FavoriteStore] Failed to add favorite: ${result.message}`);
+                        return false;
+                    }
+                }
+            } catch (err) {
+                this.error = "즐겨찾기 추가/제거 중 오류가 발생했습니다.";
+                console.error("[FavoriteStore] toggleFavorite action error:", err);
+                return false;
+            } finally {
+                this.isLoading = false;
+            }
+        },
+
+        clearFavorites() {
+            this.favoriteIsbns.clear();
+            console.log("[FavoriteStore] favoriteIsbns Set cleared.");
+        }
+    }
 });
-
-router.beforeEach((to, from, next) => {
-  const isLoggedIn = localStorage.getItem("isLogin") === "true";
-
-  if (to.meta.requiresAuth && !isLoggedIn) {
-    next({ name: "LoginPage" });
-  } else if (
-    (to.name === "LoginPage" || to.name === "SignupPage") &&
-    isLoggedIn
-  ) {
-    next({ name: "Home" });
-  } else {
-    next();
-  }
-});
-
-export default router;
