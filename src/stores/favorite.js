@@ -54,7 +54,7 @@ const routes = [
       },
       {
         path: "/favorites",
-        name: "favorites",
+        name: "Favorites",
         component: Favorite,
         meta: { requiresAuth: true },  
       },

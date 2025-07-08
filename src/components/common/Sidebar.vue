@@ -11,6 +11,7 @@ const isRoute = (...names) => names.includes(route.name);
 const goHome = () => router.push("/");
 const goCommunity = () => router.push("/community");
 const goMyPage = () => router.push("/mypage");
+const goFavorites = () => router.push("/favorites");
 const nickname = localStorage.getItem("nickname");
 
 const logout = async () => {
@@ -118,6 +119,24 @@ const logout = async () => {
         <span>📚</span>
         <span>내 서재</span>
       </li>
+
+      <li
+        class="cursor-pointer px-4 py-2 rounded-md transition-all duration-150 flex items-center space-x-2"
+        :class="{
+          'bg-[#e3c02b] text-white font-bold shadow': isRoute('favorites'),
+          'hover:bg-[#e3c02b]/10 hover:text-[#e3c02b]': !isRoute('favorites'),
+        }"
+        @click="
+          () => {
+            goFavorites();
+            $emit('close-sidebar');
+          }
+        "
+      >
+        <span>⭐</span>
+        <span>즐겨찾기</span>
+      </li>
+
     </ul>
 
     <div class="mt-10 text-xs text-gray-500 text-center px-2">
