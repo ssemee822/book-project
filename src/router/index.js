@@ -11,6 +11,7 @@ import SignupPage from "../pages/SignupPage.vue";
 import PostCreate from "../pages/PostCreate.vue";
 import Bestseller from "../pages/Home.vue";
 import Search from "../pages/Search.vue";
+import Favorite from "../pages/FavoritePage.vue";
 
 const routes = [
   {
@@ -52,6 +53,12 @@ const routes = [
         meta: { requiresAuth: true },
       },
       {
+        path: "/favorites",
+        name: "favorites",
+        component: Favorite,
+        meta: { requiresAuth: true },  
+      },
+      {
         path: "/post/:boardId",
         name: "PostDetail",
         component: PostDetail,
@@ -74,6 +81,7 @@ const routes = [
         name: "Search",
         component: Search,
         meta: { requiresAuth: true },
+        
       },
     ],
   },

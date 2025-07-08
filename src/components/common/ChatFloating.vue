@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, watchEffect, nextTick, computed } from "vue";
-import SockJS from "sockjs-client/dist/sockjs.min.js";
+import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 
 const isOpen = ref(false);
