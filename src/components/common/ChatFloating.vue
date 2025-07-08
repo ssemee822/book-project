@@ -147,7 +147,7 @@ const groupMessagesByDate = (messages) => {
       v-if="isOpen"
       class="fixed bottom-20 right-6 w-[320px] h-[480px] bg-white border border-gray-300 shadow-lg rounded-lg overflow-hidden z-40 flex flex-col"
     >
-      <div class="bg-yellow-100 px-4 py-2 font-semibold">💬 쭉정이 채팅</div>
+      <div class="bg-yellow-100 px-4 py-2 font-semibold">쭉정이 채팅</div>
 
       <div
         ref="chatContainer"
