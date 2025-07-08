@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watchEffect, nextTick } from "vue";
+import { ref, onMounted, watchEffect, nextTick, computed } from "vue";
 import SockJS from "sockjs-client/dist/sockjs.min.js";
 import Stomp from "stompjs";
 
@@ -9,6 +9,8 @@ const messages = ref([]);
 const accessToken = localStorage.getItem("accessToken");
 const chatContainer = ref(null);
 let stompClient = null;
+
+const groupedMessages = computed(() => groupMessagesByDate(messages.value));
 
 const scrollToBottom = () => {
   nextTick(() => {
@@ -51,12 +53,11 @@ const connectSocket = () => {
       });
 
       stompClient.subscribe("/user/queue/history", (msg) => {
-        console.log(msg);
         const history = JSON.parse(msg.body);
         const token = localStorage.getItem("accessToken");
         const myEmail = JSON.parse(atob(token.split(".")[1])).sub;
 
-        messages.value = history.map((m) => ({
+        messages.value = history.slice(-100).map((m) => ({
           text: m.content,
           sender: m.sender,
           isMine: m.sender === myEmail,
@@ -109,6 +110,29 @@ const formatTime = (ts) => {
   const meridiem = isAM ? "오전" : "오후";
   return `${meridiem} ${hour12}:${minutes}`;
 };
+
+const groupMessagesByDate = (messages) => {
+  const grouped = [];
+  let lastDate = null;
+
+  messages.forEach((msg) => {
+    const date = new Date(msg.timestamp).toLocaleDateString("ko-KR", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      weekday: "short",
+    });
+
+    if (date !== lastDate) {
+      grouped.push({ type: "date", value: date });
+      lastDate = date;
+    }
+
+    grouped.push({ type: "message", ...msg });
+  });
+
+  return grouped;
+};
 </script>
 
 <template>
@@ -129,38 +153,46 @@ const formatTime = (ts) => {
         ref="chatContainer"
         class="flex-1 overflow-y-auto p-4 text-sm space-y-2"
       >
-        <div
-          v-for="(msg, index) in messages"
-          :key="index"
-          class="flex flex-col"
-          :class="msg.isMine ? 'items-end' : 'items-start'"
-        >
+        <div v-for="(item, index) in groupedMessages" :key="index">
           <div
-            v-if="
-              !msg.isMine &&
-              (index === 0 || messages[index - 1].sender !== msg.sender)
-            "
-            class="text-xs text-gray-500 mb-1"
+            v-if="item.type === 'date'"
+            class="text-center text-gray-700 text-[0.81rem] mt-4 mb-2 py-[0.1rem] bg-gray-200 rounded-lg"
           >
-            {{ msg.nickname }}
+            {{ item.value }}
           </div>
 
           <div
-            class="flex items-end space-x-1"
-            :class="msg.isMine ? 'flex-row-reverse' : 'flex-row'"
+            v-else
+            :class="[
+              'flex flex-col',
+              item.isMine ? 'items-end' : 'items-start',
+            ]"
           >
             <div
-              :class="[
-                'px-3 py-2 rounded-xl max-w-[70%] break-words',
-                msg.isMine
-                  ? 'bg-yellow-300 text-gray-900 rounded-br-none'
-                  : 'bg-gray-200 text-gray-800 rounded-bl-none',
-              ]"
+              v-if="
+                !item.isMine && groupedMessages[index - 1].sender != item.sender
+              "
+              class="text-xs text-gray-500 mb-1"
             >
-              {{ msg.text }}
+              {{ item.nickname }}
             </div>
-            <div class="text-[10px] text-gray-400 pr-1">
-              {{ formatTime(msg.timestamp) }}
+            <div
+              class="flex items-end space-x-1"
+              :class="item.isMine ? 'flex-row-reverse' : 'flex-row'"
+            >
+              <div
+                :class="[
+                  'px-3 py-2 rounded-xl max-w-[70%] break-words',
+                  item.isMine
+                    ? 'bg-yellow-300 text-gray-900 rounded-br-none'
+                    : 'bg-gray-200 text-gray-800 rounded-bl-none',
+                ]"
+              >
+                {{ item.text }}
+              </div>
+              <div class="text-[10px] text-gray-400 pr-1">
+                {{ formatTime(item.timestamp) }}
+              </div>
             </div>
           </div>
         </div>
