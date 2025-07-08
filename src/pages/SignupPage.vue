@@ -2,6 +2,8 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../stores/auth";
+import axios from "../api/axios";
+import BaseButton from "../components/common/BaseButton.vue";
 
 const nickname = ref("");
 const email = ref("");
@@ -9,6 +11,16 @@ const password = ref("");
 const passwordConfirm = ref("");
 const router = useRouter();
 const authStore = useAuthStore();
+const checkEmail = ref("");
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const shouldShake = ref(false);
+
+const triggerShake = () => {
+  shouldShake.value = false;
+  requestAnimationFrame(() => {
+    shouldShake.value = true;
+  });
+};
 
 const handleSignup = async () => {
   if (password.value !== passwordConfirm.value) {
@@ -22,6 +34,27 @@ const handleSignup = async () => {
     email: email.value,
     password: password.value,
   });
+};
+
+const checkEmailDuplicate = async () => {
+  if (!email.value) {
+    checkEmail.value = "이메일을 입력해주세요.";
+    triggerShake();
+  } else if (!emailRegex.test(email.value)) {
+    checkEmail.value = "올바른 이메일 형식이 아닙니다.";
+    triggerShake();
+  } else {
+    const response = await axios.get("api/auth/email", {
+      params: { email: email.value },
+    });
+    if (response.data) {
+      checkEmail.value = "이미 사용 중인 이메일입니다.";
+      triggerShake();
+    } else {
+      shouldShake.value = false;
+      checkEmail.value = "사용할 수 있는 이메일입니다.";
+    }
+  }
 };
 </script>
 
@@ -49,19 +82,41 @@ const handleSignup = async () => {
         <p class="text-sm text-gray-500 mb-6">
           저희에게 당신의 이야기를 들려주세요
         </p>
-        <form @submit.prevent="handleSignup">
-          <input
-            v-model="email"
-            type="text"
-            placeholder="아이디 또는 이메일"
-            class="w-full border px-4 py-2 mb-3 rounded text-sm"
-          />
-          <input
-            v-model="nickname"
-            type="text"
-            placeholder="닉네임"
-            class="w-full border px-4 py-2 mb-3 rounded text-sm"
-          />
+        <form @submit.prevent="handleSignup" class="gap-12">
+          <div class="items-center mb-3">
+            <div class="flex justify-center h-[38px]">
+              <input
+                v-model="email"
+                type="text"
+                placeholder="아이디 또는 이메일"
+                class="w-full border px-4 py-2 rounded text-sm"
+              />
+              <BaseButton
+                type="button"
+                @click="checkEmailDuplicate"
+                class="border self-center h-[100%] ml-3 bg-black text-white hover:bg-gray-700 rounded text-[12px] px-[2px] w-32 font-light"
+              >
+                중복 확인
+              </BaseButton>
+            </div>
+            <p
+              class="text-green-500 text-sm pl-1 mt-1"
+              :class="[
+                { shake: shouldShake },
+                shouldShake ? 'text-red-500' : 'text-green-500',
+              ]"
+            >
+              {{ checkEmail }}
+            </p>
+          </div>
+          <div>
+            <input
+              v-model="nickname"
+              type="text"
+              placeholder="닉네임"
+              class="w-full border px-4 py-2 mb-3 rounded text-sm"
+            />
+          </div>
           <input
             v-model="password"
             type="password"
@@ -95,96 +150,29 @@ const handleSignup = async () => {
   </div>
 </template>
 
-<!-- 
+<style scoped>
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-3px);
+  }
+  40% {
+    transform: translateX(3px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(3px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
 
-<template>
-  <div
-    class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8"
-  >
-    <div class="max-w-md w-full space-y-8 p-10 bg-white rounded-lg shadow-md">
-      <div>
-        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          회원가입
-        </h2>
-        <p class="mt-2 text-center text-sm text-gray-600">
-          이미 계정이 있으신가요?
-          <router-link
-            to="/login"
-            class="font-medium text-indigo-600 hover:text-indigo-500"
-          >
-            로그인
-          </router-link>
-        </p>
-      </div>
-      <form class="mt-8 space-y-6" @submit.prevent="handleSignup">
-        <div class="rounded-md shadow-sm -space-y-px">
-          <div>
-            <label for="nickname" class="sr-only">닉네임</label>
-            <input
-              id="nickname"
-              name="nickname"
-              type="text"
-              autocomplete="nickname"
-              required
-              v-model="nickname"
-              class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="닉네임"
-            />
-          </div>
-          <div>
-            <label for="email-address" class="sr-only">이메일 주소</label>
-            <input
-              id="email-address"
-              name="email"
-              type="email"
-              autocomplete="email"
-              required
-              v-model="email"
-              class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="이메일 주소"
-            />
-          </div>
-          <div>
-            <label for="password" class="sr-only">비밀번호</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              autocomplete="new-password"
-              required
-              v-model="password"
-              class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="비밀번호"
-            />
-          </div>
-          <div>
-            <label for="password-confirm" class="sr-only">비밀번호 확인</label>
-            <input
-              id="password-confirm"
-              name="password-confirm"
-              type="password"
-              autocomplete="new-password"
-              required
-              v-model="passwordConfirm"
-              class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="비밀번호 확인"
-            />
-          </div>
-        </div>
-
-        <div>
-          <BaseButton
-            type="submit"
-            :disabled="authStore.isLoading"
-            class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-          >
-            {{ authStore.isLoading ? "가입 중..." : "회원가입" }}
-          </BaseButton>
-        </div>
-        <p v-if="authStore.error" class="text-red-500 text-sm text-center mt-2">
-          {{ authStore.error }}
-        </p>
-      </form>
-    </div>
-  </div>
-</template> -->
+.shake {
+  animation: shake 0.3s ease-in-out;
+}
+</style>
